@@ -82,7 +82,16 @@ if (file_exists(__DIR__ . '/vendor/autoload.php')) {
 switch (ENVIRONMENT)
 {
 	case 'development':
-		error_reporting(-1);
+		// PHP 8.x compatibility: Show errors but suppress deprecation warnings from CI3
+		if (version_compare(PHP_VERSION, '8.0', '>='))
+		{
+			// For PHP 8+, exclude deprecation warnings (CI3 compatibility issue)
+			error_reporting(E_ALL & ~E_DEPRECATED & ~E_USER_DEPRECATED);
+		}
+		else
+		{
+			error_reporting(-1);
+		}
 		ini_set('display_errors', 1);
 	break;
 
