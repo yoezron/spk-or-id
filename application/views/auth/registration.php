@@ -12,6 +12,8 @@
                                 <h1 class="h4 text-gray-900 fw-bold">Bergabung Bersama Kami!</h1>
                             </div>
                             <form class="user" method="post" action="<?= base_url('auth/registration'); ?>" autocomplete="off" onsubmit="return validateCheckboxes();">
+                                <!-- CSRF Protection -->
+                                <input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>" value="<?= $this->security->get_csrf_hash(); ?>">
                                 <!-- Nama -->
                                 <div class="mb-3">
                                     <label for="name" class="form-label">Nama Lengkap</label>
