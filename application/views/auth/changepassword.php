@@ -18,6 +18,8 @@
                                 </div>
                                 <?= $this->session->flashdata('message'); ?>
                                 <form class="user" method="post" action="<?= base_url('auth/changepassword'); ?>">
+                                    <!-- CSRF Protection -->
+                                    <input type="hidden" name="<?= $this->security->get_csrf_token_name(); ?>" value="<?= $this->security->get_csrf_hash(); ?>">
                                     <div class="form-group">
                                         <input type="password" class="form-control form-control-user" id="password1" name="password1" placeholder="Masukkan password baru anda...">
                                         <?= form_error('password1', '<small class="text-danger pl-3">', '</small>'); ?>
