@@ -1,32 +1,77 @@
-.DS_Store
+# Environment & Secrets
+.env
+.env.local
+.env.*.local
 
-application/cache/*
-!application/cache/index.html
+# Database dumps & backups
+*.sql
+*.sql.gz
+*.sql.zip
+*.dump
+/backups/
+*.backup
 
+# Logs
 application/logs/*
 !application/logs/index.html
+!application/logs/.htaccess
+*.log
 
-!application/*/.htaccess
+# Cache
+application/cache/*
+!application/cache/index.html
+!application/cache/.htaccess
+application/cache/db/*
 
+# Sessions
+application/sessions/*
+
+# User uploads (configure based on your needs)
+# /uploads/*
+# !/uploads/.htaccess
+
+# Vendor & Dependencies
+/vendor/
 composer.lock
-tests/mocks/database/ci_test.sqlite
 
+# Node modules (if using npm/yarn)
+/node_modules/
+package-lock.json
+yarn.lock
+
+# IDE Files
+.vscode/
+.idea/
+/nbproject/
+*.swp
+*.swo
+*~
+*.sublime-workspace
+*.sublime-project
+*.tmlanguage.cache
+*.tmPreferences.cache
+*.stTheme.cache
+
+# OS Files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Test Files
+tests/mocks/database/ci_test.sqlite
+/tests/tests/
+/tests/results/
+
+# User Guide Build
 user_guide_src/build/*
 user_guide_src/cilexer/build/*
 user_guide_src/cilexer/dist/*
 user_guide_src/cilexer/pycilexer.egg-info/*
-/vendor/
 
-# IDE Files
-#-------------------------
-/nbproject/
-.idea/*
+# Malware & Security
+monarx*.php
+*analyzer*.php
 
-## Sublime Text cache files
-*.tmlanguage.cache
-*.tmPreferences.cache
-*.stTheme.cache
-*.sublime-workspace
-*.sublime-project
-/tests/tests/
-/tests/results/
+# Keep htaccess files
+!application/*/.htaccess
+!*/.htaccess

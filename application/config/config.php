@@ -23,7 +23,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'http://localhost/spk-or-id/';
+$config['base_url'] = $_ENV['BASE_URL'] ?? 'http://localhost/spk-or-id/';
 
 /*
 |--------------------------------------------------------------------------
@@ -326,7 +326,7 @@ $config['cache_query_string'] = FALSE;
 | https://codeigniter.com/userguide3/libraries/encryption.html
 |
 */
-$config['encryption_key'] = '';
+$config['encryption_key'] = $_ENV['ENCRYPTION_KEY'] ?? '';
 
 /*
 |--------------------------------------------------------------------------
@@ -457,11 +457,11 @@ $config['global_xss_filtering'] = FALSE;
 | 'csrf_regenerate' = Regenerate token on every submission
 | 'csrf_exclude_uris' = Array of URIs which ignore CSRF checks
 */
-$config['csrf_protection'] = FALSE;
-$config['csrf_token_name'] = 'csrf_test_name';
-$config['csrf_cookie_name'] = 'csrf_cookie_name';
-$config['csrf_expire'] = 7200;
-$config['csrf_regenerate'] = TRUE;
+$config['csrf_protection'] = filter_var($_ENV['CSRF_PROTECTION'] ?? 'true', FILTER_VALIDATE_BOOLEAN);
+$config['csrf_token_name'] = $_ENV['CSRF_TOKEN_NAME'] ?? 'csrf_token';
+$config['csrf_cookie_name'] = $_ENV['CSRF_COOKIE_NAME'] ?? 'csrf_cookie';
+$config['csrf_expire'] = $_ENV['CSRF_EXPIRE'] ?? 7200;
+$config['csrf_regenerate'] = filter_var($_ENV['CSRF_REGENERATE'] ?? 'true', FILTER_VALIDATE_BOOLEAN);
 $config['csrf_exclude_uris'] = array();
 
 /*
