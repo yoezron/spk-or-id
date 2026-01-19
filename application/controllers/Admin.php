@@ -16,17 +16,70 @@ class Admin extends CI_Controller
         $data['title'] = 'Dashboard';
         $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
 
-        // Mengambil jumlah total pengguna (user)
-        $data['total_users'] = $this->db->where('role_id !=', 2)->count_all_results('user');
+        // Total anggota (exclude admin role_id = 1)
+        $data['total_users'] = $this->db->where('role_id !=', 1)->count_all_results('user');
 
-        // Mengambil data gender
-        $data['male_count'] = $this->db->where('role_id =', 6);
-        $data['male_count'] = $this->db->where('gender', 'laki-laki')->count_all_results('user');
-        $data['female_count'] = $this->db->where('role_id =', 6);
-        $data['female_count'] = $this->db->where('gender', 'perempuan')->count_all_results('user');
+        // Gender statistics (role_id = 6 adalah member)
+        $data['male_count'] = $this->db->where('role_id', 6)->where('gender', 'laki-laki')->count_all_results('user');
+        $data['female_count'] = $this->db->where('role_id', 6)->where('gender', 'perempuan')->count_all_results('user');
 
-        // Mengambil data gaji
-        $data['salary_data'] = $this->db->select('gaji, COUNT(*) as count')->group_by('gaji')->get('user')->result_array();
+        // Active vs inactive members
+        $data['active_members'] = $this->db->where('is_active', 1)->where('role_id !=', 1)->count_all_results('user');
+        $data['inactive_members'] = $this->db->where('is_active', 0)->where('role_id !=', 1)->count_all_results('user');
+
+        // Recent registrations (last 30 days)
+        $thirty_days_ago = date('Y-m-d', strtotime('-30 days'));
+        $data['new_members_month'] = $this->db->where('date_created >=', $thirty_days_ago)->where('role_id !=', 1)->count_all_results('user');
+
+        // Status kepegawaian breakdown
+        $data['status_breakdown'] = $this->db->select('status, COUNT(*) as count')
+            ->where('role_id !=', 1)
+            ->where('status IS NOT NULL')
+            ->group_by('status')
+            ->order_by('count', 'DESC')
+            ->limit(5)
+            ->get('user')->result_array();
+
+        // Top kampus dengan anggota terbanyak
+        $data['top_kampus'] = $this->db->select('kampus, COUNT(*) as count')
+            ->where('role_id !=', 1)
+            ->where('kampus IS NOT NULL')
+            ->group_by('kampus')
+            ->order_by('count', 'DESC')
+            ->limit(5)
+            ->get('user')->result_array();
+
+        // Recent members (last 10)
+        $data['recent_members'] = $this->db->select('id, name, email, kampus, date_created')
+            ->where('role_id !=', 1)
+            ->order_by('date_created', 'DESC')
+            ->limit(10)
+            ->get('user')->result_array();
+
+        // Monthly registration trend (last 6 months)
+        $data['monthly_trend'] = [];
+        for ($i = 5; $i >= 0; $i--) {
+            $month_start = date('Y-m-01', strtotime("-$i months"));
+            $month_end = date('Y-m-t', strtotime("-$i months"));
+            $count = $this->db->where('date_created >=', $month_start)
+                ->where('date_created <=', $month_end)
+                ->where('role_id !=', 1)
+                ->count_all_results('user');
+
+            $data['monthly_trend'][] = [
+                'month' => date('M Y', strtotime("-$i months")),
+                'count' => $count
+            ];
+        }
+
+        // Gaji distribution untuk charts
+        $data['salary_data'] = $this->db->select('gaji, COUNT(*) as count')
+            ->where('role_id !=', 1)
+            ->where('gaji IS NOT NULL')
+            ->where('gaji > 0')
+            ->group_by('gaji')
+            ->order_by('gaji', 'ASC')
+            ->get('user')->result_array();
 
         $this->load->view('templates/header', $data);
         $this->load->view('templates/sidebar', $data);
