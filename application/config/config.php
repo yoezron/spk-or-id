@@ -77,13 +77,14 @@ $config['index_page'] = '';
 | URI string.  The default setting of 'REQUEST_URI' works for most servers.
 | If your links do not seem to work, try one of the other delicious flavors:
 |
+| 'AUTO'           Default - auto detects (recommended for Windows/Laragon)
 | 'REQUEST_URI'    Uses $_SERVER['REQUEST_URI']
 | 'QUERY_STRING'   Uses $_SERVER['QUERY_STRING']
 | 'PATH_INFO'      Uses $_SERVER['PATH_INFO']
 |
 | WARNING: If you set this to 'PATH_INFO', URIs will always be URL-decoded!
 */
-$config['uri_protocol']    = 'REQUEST_URI';
+$config['uri_protocol']    = 'AUTO';
 
 /*
 |--------------------------------------------------------------------------
