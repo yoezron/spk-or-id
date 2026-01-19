@@ -82,22 +82,24 @@ Options -Indexes
 
 # Rewrite rules for CodeIgniter
 RewriteEngine On
+RewriteBase /spk-or-id/
 
 # Redirect HTTP to HTTPS (uncomment when SSL is ready)
 # RewriteCond %{HTTPS} off
 # RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(.*)$ index.php/$1 [L]
-
 # Prevent access to system folders
 RewriteCond %{REQUEST_URI} ^system.*
-RewriteRule ^(.*)$ /index.php?/$1 [L]
+RewriteRule ^(.*)$ index.php?/$1 [L]
 
 # Prevent access to application folder
 RewriteCond %{REQUEST_URI} ^application.*
-RewriteRule ^(.*)$ /index.php?/$1 [L]
+RewriteRule ^(.*)$ index.php?/$1 [L]
+
+# Main rewrite rule - Windows/Laragon compatible
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php?/$1 [L,QSA]
 
 # PHP security settings
 <IfModule mod_php7.c>
