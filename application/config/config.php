@@ -2,6 +2,37 @@
 defined('BASEPATH') or exit('No direct script access allowed');
 
 /*
+ * Load environment variables with fallback
+ */
+if (!isset($_ENV['ENCRYPTION_KEY']) || empty($_ENV['ENCRYPTION_KEY'])) {
+	if (file_exists(FCPATH . 'vendor/autoload.php')) {
+		require_once FCPATH . 'vendor/autoload.php';
+
+		if (file_exists(FCPATH . '.env')) {
+			try {
+				$dotenv = Dotenv\Dotenv::createImmutable(FCPATH);
+				$dotenv->load();
+			} catch (Exception $e) {
+				// Silently fail
+			}
+		}
+	}
+}
+
+/**
+ * Helper function to get environment variable
+ */
+if (!function_exists('env')) {
+	function env($key, $default = null) {
+		$value = $_ENV[$key] ?? $_SERVER[$key] ?? getenv($key);
+		if ($value === false || $value === null || $value === '') {
+			return $default;
+		}
+		return $value;
+	}
+}
+
+/*
 |--------------------------------------------------------------------------
 | Base Site URL
 |--------------------------------------------------------------------------
@@ -23,7 +54,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = $_ENV['BASE_URL'] ?? 'http://localhost/spk-or-id/';
+$config['base_url'] = env('BASE_URL', 'http://localhost/spk-or-id/');
 
 /*
 |--------------------------------------------------------------------------
@@ -326,7 +357,7 @@ $config['cache_query_string'] = FALSE;
 | https://codeigniter.com/userguide3/libraries/encryption.html
 |
 */
-$config['encryption_key'] = $_ENV['ENCRYPTION_KEY'] ?? '';
+$config['encryption_key'] = env('ENCRYPTION_KEY', '');
 
 /*
 |--------------------------------------------------------------------------
@@ -457,11 +488,11 @@ $config['global_xss_filtering'] = FALSE;
 | 'csrf_regenerate' = Regenerate token on every submission
 | 'csrf_exclude_uris' = Array of URIs which ignore CSRF checks
 */
-$config['csrf_protection'] = filter_var($_ENV['CSRF_PROTECTION'] ?? 'true', FILTER_VALIDATE_BOOLEAN);
-$config['csrf_token_name'] = $_ENV['CSRF_TOKEN_NAME'] ?? 'csrf_token';
-$config['csrf_cookie_name'] = $_ENV['CSRF_COOKIE_NAME'] ?? 'csrf_cookie';
-$config['csrf_expire'] = $_ENV['CSRF_EXPIRE'] ?? 7200;
-$config['csrf_regenerate'] = filter_var($_ENV['CSRF_REGENERATE'] ?? 'true', FILTER_VALIDATE_BOOLEAN);
+$config['csrf_protection'] = filter_var(env('CSRF_PROTECTION', 'true'), FILTER_VALIDATE_BOOLEAN);
+$config['csrf_token_name'] = env('CSRF_TOKEN_NAME', 'csrf_token');
+$config['csrf_cookie_name'] = env('CSRF_COOKIE_NAME', 'csrf_cookie');
+$config['csrf_expire'] = env('CSRF_EXPIRE', 7200);
+$config['csrf_regenerate'] = filter_var(env('CSRF_REGENERATE', 'true'), FILTER_VALIDATE_BOOLEAN);
 $config['csrf_exclude_uris'] = array();
 
 /*
