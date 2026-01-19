@@ -2,6 +2,39 @@
 defined('BASEPATH') or exit('No direct script access allowed');
 
 /*
+ * Load environment variables with fallback
+ * This ensures .env is loaded even if it wasn't loaded in index.php
+ */
+if (!isset($_ENV['DB_PASSWORD']) || empty($_ENV['DB_PASSWORD'])) {
+	// Fallback: Load .env directly in database config
+	if (file_exists(FCPATH . 'vendor/autoload.php')) {
+		require_once FCPATH . 'vendor/autoload.php';
+
+		if (file_exists(FCPATH . '.env')) {
+			try {
+				$dotenv = Dotenv\Dotenv::createImmutable(FCPATH);
+				$dotenv->load();
+			} catch (Exception $e) {
+				// Silently fail - will use fallback values
+			}
+		}
+	}
+}
+
+/**
+ * Helper function to get environment variable with fallback
+ */
+if (!function_exists('env')) {
+	function env($key, $default = null) {
+		$value = $_ENV[$key] ?? $_SERVER[$key] ?? getenv($key);
+		if ($value === false || $value === null || $value === '') {
+			return $default;
+		}
+		return $value;
+	}
+}
+
+/*
 | -------------------------------------------------------------------
 | DATABASE CONNECTIVITY SETTINGS
 | -------------------------------------------------------------------
@@ -75,18 +108,18 @@ $query_builder = TRUE;
 
 $db['default'] = array(
 	'dsn'	=> '',
-	'hostname' => $_ENV['DB_HOSTNAME'] ?? 'localhost',
-	'username' => $_ENV['DB_USERNAME'] ?? 'root',
-	'password' => $_ENV['DB_PASSWORD'] ?? '',
-	'database' => $_ENV['DB_DATABASE'] ?? 'u515429144_login',
-	'dbdriver' => $_ENV['DB_DRIVER'] ?? 'mysqli',
+	'hostname' => env('DB_HOSTNAME', 'localhost'),
+	'username' => env('DB_USERNAME', 'root'),
+	'password' => env('DB_PASSWORD', ''),
+	'database' => env('DB_DATABASE', 'u515429144_login'),
+	'dbdriver' => env('DB_DRIVER', 'mysqli'),
 	'dbprefix' => '',
 	'pconnect' => FALSE,
 	'db_debug' => (ENVIRONMENT !== 'production'),
 	'cache_on' => FALSE,
 	'cachedir' => '',
-	'char_set' => $_ENV['DB_CHARSET'] ?? 'utf8',
-	'dbcollat' => $_ENV['DB_COLLATION'] ?? 'utf8_general_ci',
+	'char_set' => env('DB_CHARSET', 'utf8'),
+	'dbcollat' => env('DB_COLLATION', 'utf8_general_ci'),
 	'swap_pre' => '',
 	'encrypt' => FALSE,
 	'compress' => FALSE,
