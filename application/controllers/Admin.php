@@ -76,6 +76,9 @@ class Admin extends CI_Controller
             ];
         }
 
+        // Debug: log monthly trend data
+        log_message('debug', 'Monthly Trend Data: ' . print_r($data['monthly_trend'], true));
+
         // Gaji distribution untuk charts
         $data['salary_data'] = $this->db->select('gaji, COUNT(*) as count')
             ->where('role_id !=', 1)

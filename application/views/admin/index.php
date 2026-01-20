@@ -335,13 +335,21 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Member Growth Line Chart - BLACK & WHITE THEME
     const growthCtx = document.getElementById('memberGrowthChart').getContext('2d');
+
+    // Debug: Log monthly trend data
+    const monthlyLabels = [<?php echo '"' . implode('","', array_column($monthly_trend, 'month')) . '"'; ?>];
+    const monthlyData = [<?php echo implode(',', array_column($monthly_trend, 'count')); ?>];
+    console.log('Monthly Trend Labels:', monthlyLabels);
+    console.log('Monthly Trend Data:', monthlyData);
+    console.log('Full Data:', <?php echo json_encode($monthly_trend); ?>);
+
     new Chart(growthCtx, {
         type: 'line',
         data: {
-            labels: [<?php echo '"' . implode('","', array_column($monthly_trend, 'month')) . '"'; ?>],
+            labels: monthlyLabels,
             datasets: [{
                 label: 'Jumlah Pendaftaran',
-                data: [<?php echo implode(',', array_column($monthly_trend, 'count')); ?>],
+                data: monthlyData,
                 borderColor: '#2d3436',
                 backgroundColor: 'rgba(45, 52, 54, 0.1)',
                 borderWidth: 2,
