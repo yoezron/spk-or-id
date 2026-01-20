@@ -16,8 +16,8 @@ class Admin extends CI_Controller
         $data['title'] = 'Dashboard';
         $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
 
-        // Total anggota (exclude admin role_id = 1)
-        $data['total_users'] = $this->db->where('role_id !=', 1)->count_all_results('user');
+        // Total anggota (exclude admin and calon anggota, only active)
+        $data['total_users'] = $this->db->where_not_in('role_id', [1, 2])->where('is_active', 1)->count_all_results('user');
 
         // Gender statistics (all roles except admin)
         $data['male_count'] = $this->db->where('role_id !=', 1)->where('gender', 'laki-laki')->count_all_results('user');
