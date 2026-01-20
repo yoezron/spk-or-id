@@ -23,9 +23,9 @@ class Admin extends CI_Controller
         $data['male_count'] = $this->db->where_not_in('role_id', [1, 2])->where('is_active', 1)->where('gender', 'laki-laki')->count_all_results('user');
         $data['female_count'] = $this->db->where_not_in('role_id', [1, 2])->where('is_active', 1)->where('gender', 'perempuan')->count_all_results('user');
 
-        // Active vs inactive members (exclude admin and calon anggota)
+        // Active vs inactive members (exclude admin only)
         $data['active_members'] = $this->db->where('is_active', 1)->where_not_in('role_id', [1, 2])->count_all_results('user');
-        $data['inactive_members'] = $this->db->where('is_active', 0)->where_not_in('role_id', [1, 2])->count_all_results('user');
+        $data['inactive_members'] = $this->db->where('is_active', 0)->where('role_id !=', 1)->count_all_results('user');
 
         // Recent registrations (last 30 days, exclude admin and calon anggota, only active)
         $thirty_days_ago = date('Y-m-d', strtotime('-30 days'));
