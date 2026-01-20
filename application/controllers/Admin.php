@@ -51,6 +51,28 @@ class Admin extends CI_Controller
             ->limit(5)
             ->get('user')->result_array();
 
+        // Top wilayah dengan anggota terbanyak (exclude admin and calon anggota, only active)
+        $data['top_wilayah'] = $this->db->select('wilayah, COUNT(*) as count')
+            ->where_not_in('role_id', [1, 2])
+            ->where('is_active', 1)
+            ->where('wilayah IS NOT NULL')
+            ->where('wilayah !=', '')
+            ->group_by('wilayah')
+            ->order_by('count', 'DESC')
+            ->limit(5)
+            ->get('user')->result_array();
+
+        // Top employer dengan anggota terbanyak (exclude admin and calon anggota, only active)
+        $data['top_employer'] = $this->db->select('employer, COUNT(*) as count')
+            ->where_not_in('role_id', [1, 2])
+            ->where('is_active', 1)
+            ->where('employer IS NOT NULL')
+            ->where('employer !=', '')
+            ->group_by('employer')
+            ->order_by('count', 'DESC')
+            ->limit(5)
+            ->get('user')->result_array();
+
         // Recent members (last 10, exclude admin and calon anggota, only active)
         $data['recent_members'] = $this->db->select('id, name, email, kampus, date_created')
             ->where_not_in('role_id', [1, 2])
