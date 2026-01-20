@@ -247,10 +247,12 @@
                                         <td><small><?= $me['status']; ?></small></td>
                                         <td><small><?= $me['employer']; ?></small></td>
                                         <td>
-                                            <?php if (!empty($me['gaji'])): ?>
+                                            <?php if (!empty($me['gaji']) && is_numeric($me['gaji'])): ?>
                                                 <span class="badge badge-secondary">
-                                                    Rp <?= number_format($me['gaji'], 0, ',', '.'); ?>
+                                                    Rp <?= number_format((float)$me['gaji'], 0, ',', '.'); ?>
                                                 </span>
+                                            <?php elseif (!empty($me['gaji'])): ?>
+                                                <small><?= $me['gaji']; ?></small>
                                             <?php else: ?>
                                                 <span class="text-muted">-</span>
                                             <?php endif; ?>
