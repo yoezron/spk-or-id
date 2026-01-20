@@ -134,7 +134,8 @@
         $(this).next('.custom-file-label').addClass("selected").html(fileName);
     });
 
-    $('.form-check-input').on('click', function() {
+    // Handler for both old form-check-input and new custom-control-input
+    $('.form-check-input, .custom-control-input').on('click', function() {
         const menuId = $(this).data('menu');
         const roleId = $(this).data('role');
 
