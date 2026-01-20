@@ -64,8 +64,8 @@ class Debug_users extends CI_Controller
         // 5. Last 6 months breakdown
         echo "\n5. Last 6 Months Breakdown (role NOT IN (1,2) AND is_active=1):\n";
         for ($i = 5; $i >= 0; $i--) {
-            $month_start = date('Y-m-01', strtotime("-$i months"));
-            $month_end = date('Y-m-t', strtotime("-$i months"));
+            $month_start = strtotime(date('Y-m-01 00:00:00', strtotime("-$i months")));
+            $month_end = strtotime(date('Y-m-t 23:59:59', strtotime("-$i months")));
 
             $count = $this->db->where('date_created >=', $month_start)
                 ->where('date_created <=', $month_end)
@@ -73,7 +73,10 @@ class Debug_users extends CI_Controller
                 ->where('is_active', 1)
                 ->count_all_results('user');
 
-            echo "   " . date('M Y', strtotime("-$i months")) . " ({$month_start} to {$month_end}): {$count}\n";
+            $month_label = date('M Y', strtotime("-$i months"));
+            $start_label = date('Y-m-d', $month_start);
+            $end_label = date('Y-m-d', $month_end);
+            echo "   {$month_label} ({$start_label} to {$end_label}) [TS: {$month_start} to {$month_end}]: {$count}\n";
         }
 
         // 6. Sample of users matching criteria
@@ -98,8 +101,8 @@ class Debug_users extends CI_Controller
         // 7. All users (any role except admin, any status)
         echo "\n7. All Users (role != 1, any status, last 6 months):\n";
         for ($i = 5; $i >= 0; $i--) {
-            $month_start = date('Y-m-01', strtotime("-$i months"));
-            $month_end = date('Y-m-t', strtotime("-$i months"));
+            $month_start = strtotime(date('Y-m-01 00:00:00', strtotime("-$i months")));
+            $month_end = strtotime(date('Y-m-t 23:59:59', strtotime("-$i months")));
 
             $count = $this->db->where('date_created >=', $month_start)
                 ->where('date_created <=', $month_end)

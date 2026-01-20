@@ -28,7 +28,7 @@ class Admin extends CI_Controller
         $data['inactive_members'] = $this->db->where('is_active', 0)->where('role_id !=', 1)->count_all_results('user');
 
         // Recent registrations (last 30 days, exclude admin and calon anggota, only active)
-        $thirty_days_ago = date('Y-m-d', strtotime('-30 days'));
+        $thirty_days_ago = strtotime('-30 days 00:00:00');
         $data['new_members_month'] = $this->db->where('date_created >=', $thirty_days_ago)->where_not_in('role_id', [1, 2])->where('is_active', 1)->count_all_results('user');
 
         // Status kepegawaian breakdown (exclude admin and calon anggota, only active)
@@ -62,8 +62,8 @@ class Admin extends CI_Controller
         // Monthly registration trend (last 6 months, exclude admin and calon anggota, only active)
         $data['monthly_trend'] = [];
         for ($i = 5; $i >= 0; $i--) {
-            $month_start = date('Y-m-01', strtotime("-$i months"));
-            $month_end = date('Y-m-t', strtotime("-$i months"));
+            $month_start = strtotime(date('Y-m-01 00:00:00', strtotime("-$i months")));
+            $month_end = strtotime(date('Y-m-t 23:59:59', strtotime("-$i months")));
             $count = $this->db->where('date_created >=', $month_start)
                 ->where('date_created <=', $month_end)
                 ->where_not_in('role_id', [1, 2])
