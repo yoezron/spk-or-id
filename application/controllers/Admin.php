@@ -95,6 +95,40 @@ class Admin extends CI_Controller
         $this->load->view('templates/footer');
     }
 
+    public function get_monthly_trend()
+    {
+        // AJAX endpoint for dynamic monthly trend data
+        $months = $this->input->get('months') ?: 6;
+        $months = intval($months);
+
+        // Limit to reasonable range
+        if ($months < 1) $months = 1;
+        if ($months > 36) $months = 36;
+
+        $monthly_trend = [];
+        for ($i = $months - 1; $i >= 0; $i--) {
+            $month_start = strtotime(date('Y-m-01 00:00:00', strtotime("-$i months")));
+            $month_end = strtotime(date('Y-m-t 23:59:59', strtotime("-$i months")));
+            $count = $this->db->where('date_created >=', $month_start)
+                ->where('date_created <=', $month_end)
+                ->where_not_in('role_id', [1, 2])
+                ->where('is_active', 1)
+                ->count_all_results('user');
+
+            $monthly_trend[] = [
+                'month' => date('M Y', strtotime("-$i months")),
+                'count' => $count
+            ];
+        }
+
+        header('Content-Type: application/json');
+        echo json_encode([
+            'success' => true,
+            'months' => $months,
+            'data' => $monthly_trend
+        ]);
+    }
+
     public function role()
     {
         $data['title'] = 'Role';
