@@ -215,7 +215,8 @@ class Admin extends CI_Controller
         echo json_encode([
             'success' => true,
             'action' => $action,
-            'message' => 'Akses berhasil diperbarui'
+            'message' => 'Akses berhasil diperbarui',
+            'csrf_token' => $this->security->get_csrf_hash()
         ]);
     }
 
