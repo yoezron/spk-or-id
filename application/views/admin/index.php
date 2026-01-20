@@ -153,11 +153,11 @@
 
     </div>
 
-    <!-- Gender Chart Row -->
+    <!-- Additional Statistics Row -->
     <div class="row">
 
         <!-- Gender Chart Card -->
-        <div class="col-xl-4 col-lg-6 col-md-12 mb-4">
+        <div class="col-xl-4 col-lg-4 col-md-6 mb-4">
             <div class="card shadow h-100">
                 <div class="card-header py-3 bg-dark text-white">
                     <h6 class="m-0 font-weight-bold">
@@ -166,6 +166,82 @@
                 </div>
                 <div class="card-body d-flex align-items-center justify-content-center">
                     <canvas id="genderChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Top Wilayah Card -->
+        <div class="col-xl-4 col-lg-4 col-md-6 mb-4">
+            <div class="card shadow h-100">
+                <div class="card-header py-3 bg-dark text-white">
+                    <h6 class="m-0 font-weight-bold">
+                        <i class="fas fa-map-marked-alt"></i> Top 5 Wilayah
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <?php if (!empty($top_wilayah)): ?>
+                        <?php foreach ($top_wilayah as $index => $wilayah): ?>
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <small class="font-weight-bold text-dark"><?= ($index + 1) ?>. <?= ucwords(strtolower($wilayah['wilayah'])); ?></small>
+                                    <small class="font-weight-bold text-dark"><?= $wilayah['count']; ?> anggota</small>
+                                </div>
+                                <div class="progress" style="height: 8px;">
+                                    <?php
+                                    $max_count = !empty($top_wilayah) ? $top_wilayah[0]['count'] : 1;
+                                    $percentage = ($wilayah['count'] / $max_count) * 100;
+                                    ?>
+                                    <div class="progress-bar bg-dark" role="progressbar"
+                                        style="width: <?= $percentage; ?>%"
+                                        aria-valuenow="<?= $percentage; ?>" aria-valuemin="0" aria-valuemax="100">
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <p class="text-muted text-center mb-0">Belum ada data wilayah.</p>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </div>
+
+        <!-- Top Employer Card -->
+        <div class="col-xl-4 col-lg-4 col-md-6 mb-4">
+            <div class="card shadow h-100">
+                <div class="card-header py-3 bg-dark text-white">
+                    <h6 class="m-0 font-weight-bold">
+                        <i class="fas fa-building"></i> Top 5 Employer
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <?php if (!empty($top_employer)): ?>
+                        <?php foreach ($top_employer as $index => $employer): ?>
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <small class="font-weight-bold text-dark"><?= ($index + 1) ?>.
+                                        <?php
+                                        $emp_name = strlen($employer['employer']) > 25 ?
+                                            substr($employer['employer'], 0, 25) . '...' : $employer['employer'];
+                                        echo $emp_name;
+                                        ?>
+                                    </small>
+                                    <small class="font-weight-bold text-dark"><?= $employer['count']; ?></small>
+                                </div>
+                                <div class="progress" style="height: 8px;">
+                                    <?php
+                                    $max_count = !empty($top_employer) ? $top_employer[0]['count'] : 1;
+                                    $percentage = ($employer['count'] / $max_count) * 100;
+                                    ?>
+                                    <div class="progress-bar bg-secondary" role="progressbar"
+                                        style="width: <?= $percentage; ?>%"
+                                        aria-valuenow="<?= $percentage; ?>" aria-valuemin="0" aria-valuemax="100">
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <p class="text-muted text-center mb-0">Belum ada data employer.</p>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
