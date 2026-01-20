@@ -176,8 +176,8 @@
     <div class="row">
 
         <!-- Member Growth Chart -->
-        <div class="col-xl-8 col-lg-7">
-            <div class="card shadow mb-4">
+        <div class="col-xl-12 col-lg-12 mb-4">
+            <div class="card shadow">
                 <div class="card-header py-3 bg-dark text-white d-flex flex-row align-items-center justify-content-between">
                     <h6 class="m-0 font-weight-bold">
                         <i class="fas fa-chart-line"></i> <span id="chartTitle">Pertumbuhan Anggota (6 Bulan Terakhir)</span>
@@ -198,8 +198,13 @@
             </div>
         </div>
 
+    </div>
+
+    <!-- Charts Row 2: Top Kampus & Status Kepegawaian -->
+    <div class="row">
+
         <!-- Top Kampus Chart -->
-        <div class="col-xl-4 col-lg-5">
+        <div class="col-xl-6 col-lg-6">
             <div class="card shadow mb-4">
                 <div class="card-header py-3 bg-dark text-white">
                     <h6 class="m-0 font-weight-bold">
@@ -211,11 +216,6 @@
                 </div>
             </div>
         </div>
-
-    </div>
-
-    <!-- Status Kepegawaian & Recent Members Row -->
-    <div class="row">
 
         <!-- Status Kepegawaian Breakdown -->
         <div class="col-xl-6 col-lg-6">
@@ -251,8 +251,13 @@
             </div>
         </div>
 
+    </div>
+
+    <!-- Row 3: Recent Members -->
+    <div class="row">
+
         <!-- Recent Members -->
-        <div class="col-xl-6 col-lg-6">
+        <div class="col-xl-12 col-lg-12">
             <div class="card shadow mb-4">
                 <div class="card-header py-3 bg-dark text-white">
                     <h6 class="m-0 font-weight-bold">
