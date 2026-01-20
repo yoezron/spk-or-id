@@ -100,13 +100,8 @@
             </div>
         </div>
 
-    </div>
-
-    <!-- Gender Distribution Row -->
-    <div class="row">
-
         <!-- Laki-Laki Card -->
-        <div class="col-xl-4 col-md-6 mb-4">
+        <div class="col-xl-3 col-md-6 mb-4">
             <div class="card border-left-dark shadow h-100 py-2 card-hover">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
@@ -132,7 +127,7 @@
         </div>
 
         <!-- Perempuan Card -->
-        <div class="col-xl-4 col-md-6 mb-4">
+        <div class="col-xl-3 col-md-6 mb-4">
             <div class="card border-left-secondary shadow h-100 py-2 card-hover">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
@@ -156,15 +151,20 @@
             </div>
         </div>
 
+    </div>
+
+    <!-- Gender Chart Row -->
+    <div class="row">
+
         <!-- Gender Chart Card -->
-        <div class="col-xl-4 col-md-12 mb-4">
+        <div class="col-xl-4 col-lg-6 col-md-12 mb-4">
             <div class="card shadow h-100">
                 <div class="card-header py-3 bg-dark text-white">
                     <h6 class="m-0 font-weight-bold">
                         <i class="fas fa-chart-pie"></i> Distribusi Gender
                     </h6>
                 </div>
-                <div class="card-body">
+                <div class="card-body d-flex align-items-center justify-content-center">
                     <canvas id="genderChart"></canvas>
                 </div>
             </div>
