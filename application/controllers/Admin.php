@@ -201,12 +201,22 @@ class Admin extends CI_Controller
 
         $result = $this->db->get_where('user_access_menu', $data);
 
+        $action = '';
         if ($result->num_rows() < 1) {
             $this->db->insert('user_access_menu', $data);
+            $action = 'granted';
         } else {
             $this->db->delete('user_access_menu', $data);
+            $action = 'revoked';
         }
-        $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Akses Telah Berubah!</div>');
+
+        // Return JSON response for AJAX
+        header('Content-Type: application/json');
+        echo json_encode([
+            'success' => true,
+            'action' => $action,
+            'message' => 'Akses berhasil diperbarui'
+        ]);
     }
 
     public function member()
