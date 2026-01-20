@@ -19,9 +19,9 @@ class Admin extends CI_Controller
         // Total anggota (exclude admin role_id = 1)
         $data['total_users'] = $this->db->where('role_id !=', 1)->count_all_results('user');
 
-        // Gender statistics (role_id = 6 adalah member)
-        $data['male_count'] = $this->db->where('role_id', 6)->where('gender', 'laki-laki')->count_all_results('user');
-        $data['female_count'] = $this->db->where('role_id', 6)->where('gender', 'perempuan')->count_all_results('user');
+        // Gender statistics (all roles except admin)
+        $data['male_count'] = $this->db->where('role_id !=', 1)->where('gender', 'laki-laki')->count_all_results('user');
+        $data['female_count'] = $this->db->where('role_id !=', 1)->where('gender', 'perempuan')->count_all_results('user');
 
         // Active vs inactive members
         $data['active_members'] = $this->db->where('is_active', 1)->where('role_id !=', 1)->count_all_results('user');
