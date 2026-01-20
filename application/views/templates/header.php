@@ -146,7 +146,7 @@
         }
 
         .card-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #2d3436 !important;
             color: white;
             border-radius: 10px 10px 0 0 !important;
             padding: 20px;
