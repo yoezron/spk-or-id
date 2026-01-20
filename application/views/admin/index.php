@@ -180,8 +180,17 @@
             <div class="card shadow mb-4">
                 <div class="card-header py-3 bg-dark text-white d-flex flex-row align-items-center justify-content-between">
                     <h6 class="m-0 font-weight-bold">
-                        <i class="fas fa-chart-line"></i> Pertumbuhan Anggota (6 Bulan Terakhir)
+                        <i class="fas fa-chart-line"></i> <span id="chartTitle">Pertumbuhan Anggota (6 Bulan Terakhir)</span>
                     </h6>
+                    <div class="dropdown no-arrow">
+                        <select id="timeRangeSelector" class="form-control form-control-sm bg-dark text-white border-0" style="width: auto; cursor: pointer;">
+                            <option value="3">3 Bulan</option>
+                            <option value="6" selected>6 Bulan</option>
+                            <option value="12">1 Tahun</option>
+                            <option value="24">2 Tahun</option>
+                            <option value="36">3 Tahun</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="card-body">
                     <canvas id="memberGrowthChart"></canvas>
@@ -343,7 +352,8 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('Monthly Trend Data:', monthlyData);
     console.log('Full Data:', <?php echo json_encode($monthly_trend); ?>);
 
-    new Chart(growthCtx, {
+    // Store chart instance globally for updates
+    let memberGrowthChart = new Chart(growthCtx, {
         type: 'line',
         data: {
             labels: monthlyLabels,
@@ -378,6 +388,41 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             }
         }
+    });
+
+    // Time Range Selector Handler
+    document.getElementById('timeRangeSelector').addEventListener('change', function() {
+        const months = parseInt(this.value);
+
+        // Update chart title
+        let periodText = months + ' Bulan Terakhir';
+        if (months === 12) periodText = '1 Tahun Terakhir';
+        else if (months === 24) periodText = '2 Tahun Terakhir';
+        else if (months === 36) periodText = '3 Tahun Terakhir';
+
+        document.getElementById('chartTitle').innerHTML =
+            '<i class="fas fa-chart-line"></i> Pertumbuhan Anggota (' + periodText + ')';
+
+        // Fetch new data via AJAX
+        fetch('<?php echo base_url('admin/get_monthly_trend'); ?>?months=' + months)
+            .then(response => response.json())
+            .then(result => {
+                if (result.success) {
+                    // Extract labels and data from response
+                    const newLabels = result.data.map(item => item.month);
+                    const newData = result.data.map(item => item.count);
+
+                    // Update chart
+                    memberGrowthChart.data.labels = newLabels;
+                    memberGrowthChart.data.datasets[0].data = newData;
+                    memberGrowthChart.update();
+
+                    console.log('Chart updated with ' + months + ' months data');
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching monthly trend:', error);
+            });
     });
 
     // Top Kampus Bar Chart - BLACK & WHITE THEME
