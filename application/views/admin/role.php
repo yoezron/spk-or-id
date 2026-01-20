@@ -10,8 +10,8 @@
             <?= form_error('menu', '<div class="alert alert-danger" role="alert">', '</div>'); ?>
 
             <?= $this->session->flashdata('message'); ?>
-            <button href="" type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#newRoleModal">
-                Tambah Peran
+            <button type="button" class="btn btn-primary mb-3" data-toggle="modal" data-target="#newRoleModal">
+                <i class="fas fa-plus"></i> Tambah Peran
             </button>
             <div class="table-responsive">
 
@@ -30,12 +30,11 @@
                                 <th scope="row"><?= $i;  ?></th>
                                 <td><?= $r['role']; ?></td>
                                 <td>
-                                    <a href="<?= base_url('admin/roleaccess/') . $r['id']; ?>" type="button" class="btn btn-warning">akses</a>
-
+                                    <a href="<?= base_url('admin/roleaccess/') . $r['id']; ?>" class="btn btn-warning">Akses</a>
                                 </td>
-                                <?php $i++; ?>
-                            <?php endforeach; ?>
                             </tr>
+                            <?php $i++; ?>
+                        <?php endforeach; ?>
                     </tbody>
                 </table>
             </div>
@@ -49,22 +48,24 @@
 <!-- End of Main Content -->
 
 <!-- Modal -->
-<div class="modal fade" id="newRoleModal" tabindex="1" aria-labelledby="newRoleModalLabel" aria-hidden="true">
+<div class="modal fade" id="newRoleModal" tabindex="-1" aria-labelledby="newRoleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="newRoleModalLabel">Tambah Peran</h1>
-                <button type="button" class="btn btn-close btn-danger " data-dismiss="modal" aria-label="Close"></button>
+                <h5 class="modal-title" id="newRoleModalLabel">Tambah Peran</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
             <form action="<?= base_url('admin/role'); ?>" method="post">
                 <div class="modal-body">
-                    <form>
-                        <div class="mb-3">
-                            <input type="text" class="form-control" id="role" name="role" aria-describedby="menu" Placeholder="Nama Peran">
-                        </div>
+                    <div class="form-group">
+                        <label for="role">Nama Peran</label>
+                        <input type="text" class="form-control" id="role" name="role" placeholder="Nama Peran" required>
+                    </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
                     <button type="submit" class="btn btn-primary">Tambah</button>
                 </div>
             </form>
