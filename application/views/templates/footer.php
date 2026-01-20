@@ -135,9 +135,18 @@
     });
 
     // Handler for both old form-check-input and new custom-control-input
-    $('.form-check-input, .custom-control-input').on('click', function() {
+    $('.form-check-input, .custom-control-input').on('change', function() {
         const menuId = $(this).data('menu');
         const roleId = $(this).data('role');
+        const checkbox = $(this);
+
+        // Disable checkbox while processing
+        checkbox.prop('disabled', true);
+
+        // Show loading state
+        const label = $('label[for="' + checkbox.attr('id') + '"]');
+        const originalHtml = label.html();
+        label.html('<span class="badge badge-warning"><i class="fas fa-spinner fa-spin"></i> Menyimpan...</span>');
 
         $.ajax({
             url: "<?= base_url('admin/changeaccess'); ?>",
@@ -147,7 +156,25 @@
                 roleId: roleId
             },
             success: function() {
-                document.location.href = "<?= base_url('admin/roleaccess/'); ?>" + roleId;
+                // Show success feedback
+                label.html('<span class="badge badge-success"><i class="fas fa-check"></i> Tersimpan!</span>');
+
+                // Restore original state after 1 second
+                setTimeout(function() {
+                    label.html(originalHtml);
+                    checkbox.prop('disabled', false);
+                }, 1000);
+            },
+            error: function() {
+                // Revert checkbox state on error
+                checkbox.prop('checked', !checkbox.prop('checked'));
+                label.html('<span class="badge badge-danger"><i class="fas fa-times"></i> Gagal!</span>');
+
+                // Restore original state after 2 seconds
+                setTimeout(function() {
+                    label.html(originalHtml);
+                    checkbox.prop('disabled', false);
+                }, 2000);
             }
         });
     });
