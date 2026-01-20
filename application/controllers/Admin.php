@@ -19,51 +19,55 @@ class Admin extends CI_Controller
         // Total anggota (exclude admin and calon anggota, only active)
         $data['total_users'] = $this->db->where_not_in('role_id', [1, 2])->where('is_active', 1)->count_all_results('user');
 
-        // Gender statistics (all roles except admin)
-        $data['male_count'] = $this->db->where('role_id !=', 1)->where('gender', 'laki-laki')->count_all_results('user');
-        $data['female_count'] = $this->db->where('role_id !=', 1)->where('gender', 'perempuan')->count_all_results('user');
+        // Gender statistics (exclude admin and calon anggota, only active)
+        $data['male_count'] = $this->db->where_not_in('role_id', [1, 2])->where('is_active', 1)->where('gender', 'laki-laki')->count_all_results('user');
+        $data['female_count'] = $this->db->where_not_in('role_id', [1, 2])->where('is_active', 1)->where('gender', 'perempuan')->count_all_results('user');
 
-        // Active vs inactive members
-        $data['active_members'] = $this->db->where('is_active', 1)->where('role_id !=', 1)->count_all_results('user');
-        $data['inactive_members'] = $this->db->where('is_active', 0)->where('role_id !=', 1)->count_all_results('user');
+        // Active vs inactive members (exclude admin and calon anggota)
+        $data['active_members'] = $this->db->where('is_active', 1)->where_not_in('role_id', [1, 2])->count_all_results('user');
+        $data['inactive_members'] = $this->db->where('is_active', 0)->where_not_in('role_id', [1, 2])->count_all_results('user');
 
-        // Recent registrations (last 30 days)
+        // Recent registrations (last 30 days, exclude admin and calon anggota, only active)
         $thirty_days_ago = date('Y-m-d', strtotime('-30 days'));
-        $data['new_members_month'] = $this->db->where('date_created >=', $thirty_days_ago)->where('role_id !=', 1)->count_all_results('user');
+        $data['new_members_month'] = $this->db->where('date_created >=', $thirty_days_ago)->where_not_in('role_id', [1, 2])->where('is_active', 1)->count_all_results('user');
 
-        // Status kepegawaian breakdown
+        // Status kepegawaian breakdown (exclude admin and calon anggota, only active)
         $data['status_breakdown'] = $this->db->select('status, COUNT(*) as count')
-            ->where('role_id !=', 1)
+            ->where_not_in('role_id', [1, 2])
+            ->where('is_active', 1)
             ->where('status IS NOT NULL')
             ->group_by('status')
             ->order_by('count', 'DESC')
             ->limit(5)
             ->get('user')->result_array();
 
-        // Top kampus dengan anggota terbanyak
+        // Top kampus dengan anggota terbanyak (exclude admin and calon anggota, only active)
         $data['top_kampus'] = $this->db->select('kampus, COUNT(*) as count')
-            ->where('role_id !=', 1)
+            ->where_not_in('role_id', [1, 2])
+            ->where('is_active', 1)
             ->where('kampus IS NOT NULL')
             ->group_by('kampus')
             ->order_by('count', 'DESC')
             ->limit(5)
             ->get('user')->result_array();
 
-        // Recent members (last 10)
+        // Recent members (last 10, exclude admin and calon anggota, only active)
         $data['recent_members'] = $this->db->select('id, name, email, kampus, date_created')
-            ->where('role_id !=', 1)
+            ->where_not_in('role_id', [1, 2])
+            ->where('is_active', 1)
             ->order_by('date_created', 'DESC')
             ->limit(10)
             ->get('user')->result_array();
 
-        // Monthly registration trend (last 6 months)
+        // Monthly registration trend (last 6 months, exclude admin and calon anggota, only active)
         $data['monthly_trend'] = [];
         for ($i = 5; $i >= 0; $i--) {
             $month_start = date('Y-m-01', strtotime("-$i months"));
             $month_end = date('Y-m-t', strtotime("-$i months"));
             $count = $this->db->where('date_created >=', $month_start)
                 ->where('date_created <=', $month_end)
-                ->where('role_id !=', 1)
+                ->where_not_in('role_id', [1, 2])
+                ->where('is_active', 1)
                 ->count_all_results('user');
 
             $data['monthly_trend'][] = [
