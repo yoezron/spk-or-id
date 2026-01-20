@@ -129,6 +129,29 @@
 
 <!-- Additional custom scripts -->
 <script>
+    // Helper function to get CSRF token from meta tag
+    function getCsrfToken() {
+        return $('meta[name="csrf-token"]').attr('content');
+    }
+
+    // Setup global AJAX settings for CSRF token
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+            // Add CSRF token to all AJAX POST requests
+            if (settings.type === 'POST') {
+                var csrfToken = getCsrfToken();
+                if (csrfToken) {
+                    // Add to data if exists
+                    if (typeof settings.data === 'string') {
+                        settings.data += '&<?= $this->security->get_csrf_token_name(); ?>=' + encodeURIComponent(csrfToken);
+                    } else if (typeof settings.data === 'object') {
+                        settings.data['<?= $this->security->get_csrf_token_name(); ?>'] = csrfToken;
+                    }
+                }
+            }
+        }
+    });
+
     $('.custom-file-input').on('change', function() {
         let fileName = $(this).val().split('\\').pop();
         $(this).next('.custom-file-label').addClass("selected").html(fileName);
@@ -155,7 +178,12 @@
                 menuId: menuId,
                 roleId: roleId
             },
-            success: function() {
+            success: function(response) {
+                // Update CSRF token if provided in response
+                if (response.csrf_token) {
+                    $('meta[name="csrf-token"]').attr('content', response.csrf_token);
+                }
+
                 // Show success feedback
                 label.html('<span class="badge badge-success"><i class="fas fa-check"></i> Tersimpan!</span>');
 
@@ -165,10 +193,20 @@
                     checkbox.prop('disabled', false);
                 }, 1000);
             },
-            error: function() {
+            error: function(xhr, status, error) {
                 // Revert checkbox state on error
                 checkbox.prop('checked', !checkbox.prop('checked'));
-                label.html('<span class="badge badge-danger"><i class="fas fa-times"></i> Gagal!</span>');
+
+                let errorMessage = 'Gagal!';
+                if (xhr.status === 403) {
+                    errorMessage = 'Akses Ditolak!';
+                    console.error('CSRF Error - Response: ', xhr.responseText);
+                    console.error('CSRF Token: ', getCsrfToken());
+                } else if (xhr.status === 500) {
+                    errorMessage = 'Server Error!';
+                }
+
+                label.html('<span class="badge badge-danger"><i class="fas fa-times"></i> ' + errorMessage + '</span>');
 
                 // Restore original state after 2 seconds
                 setTimeout(function() {
