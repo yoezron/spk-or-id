@@ -2,16 +2,16 @@
 <div class="container-fluid">
 
     <!-- Page Heading -->
-    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <div class="d-sm-flex align-items-center justify-content-between mb-3">
         <div>
-            <h1 class="h3 mb-1 text-gray-800">
+            <h1 class="h4 mb-1 text-gray-800 font-weight-bold">
                 <i class="fas fa-user-circle text-primary"></i> Profil Saya
             </h1>
-            <p class="text-muted mb-0">
+            <p class="text-muted mb-0 small">
                 <i class="fas fa-hand-sparkles"></i> Salam Perjuangan, <strong><?= $user['name']; ?></strong>!
             </p>
         </div>
-        <div class="text-right">
+        <div class="text-right d-none d-sm-block">
             <span class="text-muted small">
                 <i class="fas fa-calendar-alt"></i> <?= date('d F Y'); ?>
             </span>
@@ -21,27 +21,28 @@
     <?= $this->session->flashdata('message'); ?>
 
     <!-- Main Profile Card -->
-    <div class="card shadow mb-4">
-        <div class="card-body p-4">
+    <div class="card shadow-sm border-0 mb-4">
+        <div class="card-body p-3 p-md-4">
             <div class="row">
 
                 <!-- Left Sidebar -->
-                <div class="col-lg-3">
+                <div class="col-lg-3 mb-4 mb-lg-0">
                     <!-- Profile Card -->
-                    <div class="card shadow-sm border-0 mb-4">
-                        <div class="card-body text-center">
-                            <div class="position-relative d-inline-block mb-3">
+                    <div class="card shadow-sm border-0 mb-3">
+                        <div class="card-body text-center p-3">
+                            <div class="position-relative d-inline-block mb-2">
                                 <img src="<?= base_url('assets/img/profile/') . $user['image']; ?>"
                                      alt="Profile"
-                                     class="avatar-xl img-thumbnail rounded-circle shadow">
-                                <span class="position-absolute bottom-0 end-0 bg-success rounded-circle p-2 border border-white">
-                                    <i class="fas fa-circle text-white fa-xs"></i>
+                                     class="img-thumbnail rounded-circle shadow-sm"
+                                     style="width: 100px; height: 100px; object-fit: cover;">
+                                <span class="position-absolute bottom-0 end-0 bg-success rounded-circle p-1 border border-white" style="width: 20px; height: 20px;">
+                                    <i class="fas fa-circle text-white" style="font-size: 10px;"></i>
                                 </span>
                             </div>
 
-                            <h5 class="mb-1 font-weight-bold"><?= $user['name']; ?></h5>
-                            <p class="text-muted mb-2">
-                                <small>Bergabung sejak<br><?= date('d F Y', $user['date_created']); ?></small>
+                            <h6 class="mb-0 font-weight-bold"><?= $user['name']; ?></h6>
+                            <p class="text-muted mb-2" style="font-size: 0.75rem;">
+                                Bergabung <?= date('d M Y', $user['date_created']); ?>
                             </p>
 
                             <?php foreach ($peran as $peran_pengguna) : ?>
@@ -49,59 +50,59 @@
                             <?php endforeach; ?>
 
                             <?php if (!isset($peran_pengguna) || empty($peran_pengguna) || $peran_pengguna['role'] == 'Calon Anggota') { ?>
-                                <a href="<?= base_url('user/formulir'); ?>" class="btn btn-danger btn-sm btn-block">
+                                <a href="<?= base_url('user/formulir'); ?>" class="btn btn-danger btn-sm btn-block mb-2">
                                     <i class="fas fa-user-plus"></i> Mendaftar
                                 </a>
                             <?php } else { ?>
-                                <a href="<?= base_url('user/edit'); ?>" class="btn btn-primary btn-sm btn-block">
+                                <a href="<?= base_url('user/edit'); ?>" class="btn btn-primary btn-sm btn-block mb-2">
                                     <i class="fas fa-edit"></i> Lengkapi Profil
                                 </a>
                             <?php } ?>
 
-                            <hr>
+                            <hr class="my-2">
 
-                            <div class="row text-center">
-                                <div class="col-6">
-                                    <h6 class="text-muted small">Jenis Kelamin</h6>
+                            <div class="row text-center no-gutters">
+                                <div class="col-6 border-right">
+                                    <small class="text-muted d-block" style="font-size: 0.7rem;">Gender</small>
                                     <?php if ($user['gender'] == 'laki-laki'): ?>
-                                        <span class="badge badge-info">
-                                            <i class="fas fa-mars"></i> Laki-laki
+                                        <span class="badge badge-info badge-sm">
+                                            <i class="fas fa-mars"></i>
                                         </span>
                                     <?php else: ?>
-                                        <span class="badge" style="background-color: #e83e8c; color: white;">
-                                            <i class="fas fa-venus"></i> Perempuan
+                                        <span class="badge badge-sm" style="background-color: #e83e8c; color: white;">
+                                            <i class="fas fa-venus"></i>
                                         </span>
                                     <?php endif; ?>
                                 </div>
                                 <div class="col-6">
-                                    <h6 class="text-muted small">Status</h6>
-                                    <span class="badge badge-primary"><?= $user['status']; ?></span>
+                                    <small class="text-muted d-block" style="font-size: 0.7rem;">Status</small>
+                                    <span class="badge badge-primary badge-sm" style="font-size: 0.65rem;"><?= $user['status']; ?></span>
                                 </div>
                             </div>
 
-                            <hr>
+                            <hr class="my-2">
 
                             <div class="social-links">
-                                <h6 class="text-muted mb-3">Media Sosial</h6>
+                                <small class="text-muted d-block mb-2" style="font-size: 0.75rem;">Media Sosial</small>
                                 <div class="d-flex justify-content-center">
                                     <?php if (!empty($user['facebook'])): ?>
-                                        <a href="<?= $user['facebook']; ?>" target="_blank" class="btn btn-primary btn-sm rounded-circle mx-1" title="Facebook">
-                                            <i class="fab fa-facebook-f"></i>
+                                        <a href="<?= $user['facebook']; ?>" target="_blank" class="btn btn-primary btn-sm rounded-circle mx-1 p-1" title="Facebook" style="width: 30px; height: 30px; line-height: 18px;">
+                                            <i class="fab fa-facebook-f" style="font-size: 0.75rem;"></i>
                                         </a>
                                     <?php endif; ?>
                                     <?php if (!empty($user['twitter'])): ?>
-                                        <a href="<?= $user['twitter']; ?>" target="_blank" class="btn btn-info btn-sm rounded-circle mx-1" title="Twitter">
-                                            <i class="fab fa-twitter"></i>
+                                        <a href="<?= $user['twitter']; ?>" target="_blank" class="btn btn-info btn-sm rounded-circle mx-1 p-1" title="Twitter" style="width: 30px; height: 30px; line-height: 18px;">
+                                            <i class="fab fa-twitter" style="font-size: 0.75rem;"></i>
                                         </a>
                                     <?php endif; ?>
                                     <?php if (!empty($user['linkedin'])): ?>
-                                        <a href="<?= $user['linkedin']; ?>" target="_blank" class="btn btn-primary btn-sm rounded-circle mx-1" title="LinkedIn">
+                                        <a href="<?= $user['linkedin']; ?>" target="_blank" class="btn btn-primary btn-sm rounded-circle mx-1 p-1" title="LinkedIn" style="width: 30px; height: 30px; line-height: 18px;">
                                             <i class="fab fa-linkedin"></i>
                                         </a>
                                     <?php endif; ?>
                                     <?php if (!empty($user['instagram'])): ?>
-                                        <a href="<?= $user['instagram']; ?>" target="_blank" class="btn btn-danger btn-sm rounded-circle mx-1" title="Instagram">
-                                            <i class="fab fa-instagram"></i>
+                                        <a href="<?= $user['instagram']; ?>" target="_blank" class="btn btn-danger btn-sm rounded-circle mx-1 p-1" title="Instagram" style="width: 30px; height: 30px; line-height: 18px;">
+                                            <i class="fab fa-instagram" style="font-size: 0.75rem;"></i>
                                         </a>
                                     <?php endif; ?>
                                 </div>
@@ -109,44 +110,44 @@
                         </div>
                     </div>
 
-                    <!-- Personal Description Card -->
-                    <div class="card shadow-sm border-0 mb-4">
-                        <div class="card-body">
-                            <h6 class="font-weight-bold mb-3">
-                                <i class="fas fa-quote-left text-primary"></i> Deskripsi Personal
+                    <!-- Personal Info Card -->
+                    <div class="card shadow-sm border-0 mb-3">
+                        <div class="card-body p-3">
+                            <h6 class="font-weight-bold mb-2" style="font-size: 0.85rem;">
+                                <i class="fas fa-quote-left text-primary"></i> Bio
                             </h6>
-                            <p class="text-muted small font-italic">"<?= $user['personal']; ?>"</p>
+                            <p class="text-muted font-italic mb-2" style="font-size: 0.75rem;">"<?= $user['personal']; ?>"</p>
 
-                            <hr>
+                            <hr class="my-2">
 
-                            <div class="mb-3">
-                                <small class="text-muted">Asal Kampus</small>
-                                <h6 class="mb-0"><?= $user['kampus']; ?></h6>
-                                <small><?= $user['prodi']; ?></small>
+                            <div class="mb-2">
+                                <small class="text-muted d-block" style="font-size: 0.7rem;">Kampus</small>
+                                <h6 class="mb-0" style="font-size: 0.8rem;"><?= $user['kampus']; ?></h6>
+                                <small style="font-size: 0.7rem;"><?= $user['prodi']; ?></small>
                             </div>
 
-                            <div class="mb-3">
-                                <small class="text-muted">Email</small>
-                                <h6 class="mb-0 small"><?= $user['email']; ?></h6>
+                            <div class="mb-2">
+                                <small class="text-muted d-block" style="font-size: 0.7rem;">Email</small>
+                                <h6 class="mb-0" style="font-size: 0.75rem; word-break: break-all;"><?= $user['email']; ?></h6>
                             </div>
 
-                            <div class="mb-3">
-                                <small class="text-muted">Telepon</small>
-                                <h6 class="mb-0"><?= $user['telp']; ?></h6>
+                            <div class="mb-2">
+                                <small class="text-muted d-block" style="font-size: 0.7rem;">Telepon</small>
+                                <h6 class="mb-0" style="font-size: 0.8rem;"><?= $user['telp']; ?></h6>
                             </div>
 
                             <div>
-                                <small class="text-muted">Alamat</small>
-                                <p class="mb-0 small"><?= $user['alamat']; ?></p>
+                                <small class="text-muted d-block" style="font-size: 0.7rem;">Alamat</small>
+                                <p class="mb-0" style="font-size: 0.75rem;"><?= $user['alamat']; ?></p>
                             </div>
                         </div>
                     </div>
 
                     <!-- Skills Card -->
                     <div class="card shadow-sm border-0">
-                        <div class="card-body">
-                            <h6 class="font-weight-bold mb-3">
-                                <i class="fas fa-tools text-primary"></i> Keahlian Saya
+                        <div class="card-body p-3">
+                            <h6 class="font-weight-bold mb-2" style="font-size: 0.85rem;">
+                                <i class="fas fa-tools text-primary"></i> Keahlian
                             </h6>
                             <div class="d-flex flex-wrap">
                                 <?php
@@ -155,11 +156,11 @@
                                     foreach ($keahlian_array as $keahlian) {
                                         $keahlian = trim($keahlian);
                                         if (!empty($keahlian)) {
-                                            echo '<span class="badge badge-primary m-1">' . $keahlian . '</span>';
+                                            echo '<span class="badge badge-primary m-1" style="font-size: 0.7rem;">' . $keahlian . '</span>';
                                         }
                                     }
                                 } else {
-                                    echo '<p class="text-muted small">Belum ada keahlian yang ditambahkan.</p>';
+                                    echo '<p class="text-muted mb-0" style="font-size: 0.75rem;">Belum ada keahlian.</p>';
                                 }
                                 ?>
                             </div>
@@ -170,22 +171,22 @@
                 <!-- Main Content -->
                 <div class="col-lg-9">
                     <!-- Statistics Cards -->
-                    <div class="row mb-4">
-                        <div class="col-md-4 mb-3">
-                            <div class="card border-left-primary shadow-sm h-100">
-                                <div class="card-body">
-                                    <div class="row align-items-center">
+                    <div class="row mb-3">
+                        <div class="col-md-4 col-sm-6 mb-2">
+                            <div class="card border-left-primary shadow-sm h-100 hover-shadow">
+                                <div class="card-body p-2">
+                                    <div class="row align-items-center no-gutters">
                                         <div class="col-3 text-center">
-                                            <i class="fas fa-id-card fa-3x text-primary"></i>
+                                            <i class="fas fa-id-card fa-2x text-primary"></i>
                                         </div>
-                                        <div class="col-9">
-                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                        <div class="col-9 pl-2">
+                                            <div class="font-weight-bold text-primary text-uppercase mb-0" style="font-size: 0.65rem;">
                                                 Nomor Anggota
                                             </div>
                                             <?php if (!isset($peran_pengguna) || empty($peran_pengguna) || $peran_pengguna['role'] == 'Calon Anggota') { ?>
-                                                <small class="text-muted">Belum terdaftar</small>
+                                                <small class="text-muted" style="font-size: 0.7rem;">Belum terdaftar</small>
                                             <?php } else { ?>
-                                                <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                                <div class="h6 mb-0 font-weight-bold text-gray-800" style="font-size: 0.9rem;">
                                                     <?= $user['date_created']; ?>
                                                 </div>
                                             <?php } ?>
@@ -195,18 +196,18 @@
                             </div>
                         </div>
 
-                        <div class="col-md-4 mb-3">
-                            <div class="card border-left-success shadow-sm h-100">
-                                <div class="card-body">
-                                    <div class="row align-items-center">
+                        <div class="col-md-4 col-sm-6 mb-2">
+                            <div class="card border-left-success shadow-sm h-100 hover-shadow">
+                                <div class="card-body p-2">
+                                    <div class="row align-items-center no-gutters">
                                         <div class="col-3 text-center">
-                                            <i class="fas fa-calendar-check fa-3x text-success"></i>
+                                            <i class="fas fa-calendar-check fa-2x text-success"></i>
                                         </div>
-                                        <div class="col-9">
-                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                                Tanggal Bergabung
+                                        <div class="col-9 pl-2">
+                                            <div class="font-weight-bold text-success text-uppercase mb-0" style="font-size: 0.65rem;">
+                                                Bergabung
                                             </div>
-                                            <div class="h6 mb-0 font-weight-bold text-gray-800">
+                                            <div class="h6 mb-0 font-weight-bold text-gray-800" style="font-size: 0.8rem;">
                                                 <?= date('d M Y', $user['date_created']); ?>
                                             </div>
                                         </div>
@@ -215,18 +216,18 @@
                             </div>
                         </div>
 
-                        <div class="col-md-4 mb-3">
-                            <div class="card border-left-info shadow-sm h-100">
-                                <div class="card-body">
-                                    <div class="row align-items-center">
+                        <div class="col-md-4 col-sm-6 mb-2">
+                            <div class="card border-left-info shadow-sm h-100 hover-shadow">
+                                <div class="card-body p-2">
+                                    <div class="row align-items-center no-gutters">
                                         <div class="col-3 text-center">
-                                            <i class="fas fa-map-marked-alt fa-3x text-info"></i>
+                                            <i class="fas fa-map-marked-alt fa-2x text-info"></i>
                                         </div>
-                                        <div class="col-9">
-                                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                        <div class="col-9 pl-2">
+                                            <div class="font-weight-bold text-info text-uppercase mb-0" style="font-size: 0.65rem;">
                                                 Wilayah
                                             </div>
-                                            <div class="h6 mb-0 font-weight-bold text-gray-800">
+                                            <div class="h6 mb-0 font-weight-bold text-gray-800" style="font-size: 0.8rem;">
                                                 <?= $user['wilayah']; ?>
                                             </div>
                                         </div>
@@ -238,39 +239,48 @@
 
                     <!-- Tabs Navigation -->
                     <div class="card shadow-sm border-0">
-                        <div class="card-header bg-white">
-                            <ul class="nav nav-tabs card-header-tabs" id="profileTabs" role="tablist">
-                                <li class="nav-item" role="presentation">
-                                    <a class="nav-link <?= ($active_tab == 'info') ? 'active' : ''; ?>"
+                        <div class="card-header bg-white p-2">
+                            <ul class="nav nav-tabs card-header-tabs mb-0" id="profileTabs" role="tablist">
+                                <li class="nav-item flex-fill" role="presentation">
+                                    <a class="nav-link text-center py-2 <?= ($active_tab == 'info') ? 'active' : ''; ?>"
                                        id="info-tab"
                                        data-bs-toggle="tab"
                                        href="#info"
-                                       role="tab">
-                                        <i class="fas fa-info-circle"></i> Informasi
+                                       role="tab"
+                                       style="font-size: 0.8rem;">
+                                        <i class="fas fa-info-circle d-block d-sm-inline"></i>
+                                        <span class="d-none d-sm-inline">Informasi</span>
+                                        <span class="d-inline d-sm-none" style="font-size: 0.7rem;">Info</span>
                                     </a>
                                 </li>
-                                <li class="nav-item" role="presentation">
-                                    <a class="nav-link <?= ($active_tab == 'userdetail') ? 'active' : ''; ?>"
+                                <li class="nav-item flex-fill" role="presentation">
+                                    <a class="nav-link text-center py-2 <?= ($active_tab == 'userdetail') ? 'active' : ''; ?>"
                                        id="userdetail-tab"
                                        data-bs-toggle="tab"
                                        href="#userdetail"
-                                       role="tab">
-                                        <i class="fas fa-user-alt"></i> Detail
+                                       role="tab"
+                                       style="font-size: 0.8rem;">
+                                        <i class="fas fa-user-alt d-block d-sm-inline"></i>
+                                        <span class="d-none d-sm-inline">Detail</span>
+                                        <span class="d-inline d-sm-none" style="font-size: 0.7rem;">Detail</span>
                                     </a>
                                 </li>
-                                <li class="nav-item" role="presentation">
-                                    <a class="nav-link <?= ($active_tab == 'benefit') ? 'active' : ''; ?>"
+                                <li class="nav-item flex-fill" role="presentation">
+                                    <a class="nav-link text-center py-2 <?= ($active_tab == 'benefit') ? 'active' : ''; ?>"
                                        id="benefit-tab"
                                        data-bs-toggle="tab"
                                        href="#benefit"
-                                       role="tab">
-                                        <i class="fas fa-gift"></i> Manfaat
+                                       role="tab"
+                                       style="font-size: 0.8rem;">
+                                        <i class="fas fa-gift d-block d-sm-inline"></i>
+                                        <span class="d-none d-sm-inline">Manfaat</span>
+                                        <span class="d-inline d-sm-none" style="font-size: 0.7rem;">Benefit</span>
                                     </a>
                                 </li>
                             </ul>
                         </div>
 
-                        <div class="card-body">
+                        <div class="card-body p-2 p-md-3">
                             <div class="tab-content" id="profileTabsContent">
 
                                 <!-- Tab Informasi -->
@@ -279,36 +289,36 @@
                                      role="tabpanel">
 
                                     <!-- Pembayaran Iuran Card -->
-                                    <div class="card border-primary mb-4">
-                                        <div class="card-header bg-primary text-white">
-                                            <h6 class="mb-0">
-                                                <i class="fas fa-money-check-alt"></i> Pembayaran Iuran Anggota
+                                    <div class="card border-primary mb-3">
+                                        <div class="card-header bg-primary text-white py-2">
+                                            <h6 class="mb-0" style="font-size: 0.9rem;">
+                                                <i class="fas fa-money-check-alt"></i> Pembayaran Iuran
                                             </h6>
                                         </div>
-                                        <div class="card-body">
+                                        <div class="card-body p-3">
                                             <div class="row">
-                                                <div class="col-md-4 text-center">
+                                                <div class="col-md-3 col-sm-4 text-center mb-3 mb-md-0">
                                                     <img src="<?= base_url('assets/img/qr/confirm.png') ?>"
-                                                         class="img-fluid rounded shadow-sm mb-3"
-                                                         style="cursor: pointer;"
+                                                         class="img-fluid rounded shadow-sm"
+                                                         style="cursor: pointer; max-width: 150px;"
                                                          data-toggle="modal"
                                                          data-target="#qrModal">
-                                                    <p class="small text-muted">Klik untuk memperbesar</p>
+                                                    <p class="text-muted mb-0" style="font-size: 0.7rem;">Klik untuk perbesar</p>
                                                 </div>
-                                                <div class="col-md-8">
+                                                <div class="col-md-9 col-sm-8">
                                                     <?php if (isset($iuran) && !empty($iuran)) { ?>
-                                                        <div class="alert alert-info">
-                                                            <h5><i class="fas fa-coins"></i> Jumlah Iuran: <strong><?= $iuran['iuran']; ?> /bulan</strong></h5>
+                                                        <div class="alert alert-info py-2 mb-2">
+                                                            <h6 class="mb-0" style="font-size: 0.9rem;"><i class="fas fa-coins"></i> Iuran: <strong><?= $iuran['iuran']; ?> /bulan</strong></h6>
                                                         </div>
-                                                        <p>Pembayaran iuran dapat melalui:</p>
-                                                        <ul class="list-unstyled">
-                                                            <li class="mb-2"><i class="fas fa-qrcode text-primary"></i> <strong>QRIS</strong> (Scan QR di samping)</li>
-                                                            <li class="mb-2"><i class="fas fa-university text-primary"></i> <strong>Bank BNI</strong></li>
+                                                        <p class="mb-2" style="font-size: 0.85rem;">Metode pembayaran:</p>
+                                                        <ul class="list-unstyled mb-2" style="font-size: 0.8rem;">
+                                                            <li class="mb-1"><i class="fas fa-qrcode text-primary"></i> <strong>QRIS</strong> (Scan QR)</li>
+                                                            <li class="mb-1"><i class="fas fa-university text-primary"></i> <strong>Bank BNI</strong></li>
                                                         </ul>
-                                                        <div class="card bg-light">
-                                                            <div class="card-body">
-                                                                <p class="mb-1"><strong>No. Rekening: 19 2726 8812</strong></p>
-                                                                <p class="mb-0 text-muted">a.n. Dosen Tendik Perguruan Tinggi</p>
+                                                        <div class="card bg-light mb-2">
+                                                            <div class="card-body py-2 px-3">
+                                                                <p class="mb-0" style="font-size: 0.8rem;"><strong>No. Rek: 19 2726 8812</strong></p>
+                                                                <p class="mb-0 text-muted" style="font-size: 0.7rem;">a.n. Dosen Tendik PT</p>
                                                             </div>
                                                         </div>
                                                         <?php
@@ -316,23 +326,27 @@
                                                         $iuran_amount = $iuran['iuran'];
                                                         $user_name = $user['name'];
                                                         ?>
-                                                        <div class="mt-3">
-                                                            <a href="https://api.whatsapp.com/send?phone=<?= $whatsapp_number ?>&text=<?= urlencode("Salam perjuangan! Saya $user_name, telah melakukan pembayaran Iuran Anggota SPK, sebesar $iuran_amount") ?>"
-                                                               target="_blank"
-                                                               class="btn btn-success btn-block mb-2">
-                                                                <i class="fab fa-whatsapp"></i> Konfirmasi Pembayaran
-                                                            </a>
-                                                            <a href="https://api.whatsapp.com/send?phone=<?= $whatsapp_number ?>&text=<?= urlencode("Salam perjuangan! Saya $user_name, menyatakan keberatan membayar Iuran Anggota SPK, sebesar $iuran_amount. Mohon kebijaksanaannya!") ?>"
-                                                               target="_blank"
-                                                               class="btn btn-outline-danger btn-block">
-                                                                <i class="fas fa-exclamation-circle"></i> Ajukan Keberatan
-                                                            </a>
+                                                        <div class="row">
+                                                            <div class="col-sm-6 mb-2">
+                                                                <a href="https://api.whatsapp.com/send?phone=<?= $whatsapp_number ?>&text=<?= urlencode("Salam perjuangan! Saya $user_name, telah melakukan pembayaran Iuran Anggota SPK, sebesar $iuran_amount") ?>"
+                                                                   target="_blank"
+                                                                   class="btn btn-success btn-sm btn-block">
+                                                                    <i class="fab fa-whatsapp"></i> Konfirmasi
+                                                                </a>
+                                                            </div>
+                                                            <div class="col-sm-6 mb-2">
+                                                                <a href="https://api.whatsapp.com/send?phone=<?= $whatsapp_number ?>&text=<?= urlencode("Salam perjuangan! Saya $user_name, menyatakan keberatan membayar Iuran Anggota SPK, sebesar $iuran_amount. Mohon kebijaksanaannya!") ?>"
+                                                                   target="_blank"
+                                                                   class="btn btn-outline-danger btn-sm btn-block">
+                                                                    <i class="fas fa-exclamation-circle"></i> Keberatan
+                                                                </a>
+                                                            </div>
                                                         </div>
                                                     <?php } else { ?>
-                                                        <div class="alert alert-warning">
-                                                            <h5><i class="fas fa-info-circle"></i> Data iuran tidak ditemukan</h5>
-                                                            <p>Silakan mengisi formulir pendaftaran terlebih dahulu!</p>
-                                                            <a href="<?= base_url('user/formulir'); ?>" class="btn btn-primary">
+                                                        <div class="alert alert-warning py-2 mb-0">
+                                                            <h6 style="font-size: 0.9rem;"><i class="fas fa-info-circle"></i> Data iuran tidak ditemukan</h6>
+                                                            <p class="mb-2" style="font-size: 0.8rem;">Isi formulir pendaftaran!</p>
+                                                            <a href="<?= base_url('user/formulir'); ?>" class="btn btn-primary btn-sm">
                                                                 <i class="fas fa-edit"></i> Isi Formulir
                                                             </a>
                                                         </div>
@@ -344,29 +358,31 @@
 
                                     <!-- Informasi Terbaru -->
                                     <?php if ($user['role_id'] != 2) : ?>
-                                        <h5 class="font-weight-bold mb-3">Informasi Terbaru</h5>
+                                        <h6 class="font-weight-bold mb-2 mt-3" style="font-size: 0.95rem;">
+                                            <i class="fas fa-bullhorn text-primary"></i> Informasi Terbaru
+                                        </h6>
                                         <?php foreach ($recent_information as $info) : ?>
-                                            <div class="card shadow-sm mb-3">
+                                            <div class="card shadow-sm mb-2 border-0">
                                                 <div class="row g-0">
-                                                    <div class="col-md-4">
+                                                    <div class="col-md-3 col-4">
                                                         <?php if ($info['gambar']) : ?>
                                                             <img src="<?= base_url('assets/img/info/' . $info['gambar']); ?>"
-                                                                 class="img-fluid rounded-start h-100"
-                                                                 style="object-fit: cover;"
-                                                                 alt="Info Image">
+                                                                 class="img-fluid rounded-left"
+                                                                 style="object-fit: cover; height: 100%; min-height: 100px; max-height: 150px;"
+                                                                 alt="Info">
                                                         <?php else : ?>
-                                                            <div class="bg-light h-100 d-flex align-items-center justify-content-center">
-                                                                <i class="fas fa-image fa-3x text-muted"></i>
+                                                            <div class="bg-light d-flex align-items-center justify-content-center rounded-left" style="height: 100%; min-height: 100px;">
+                                                                <i class="fas fa-image fa-2x text-muted"></i>
                                                             </div>
                                                         <?php endif; ?>
                                                     </div>
-                                                    <div class="col-md-8">
-                                                        <div class="card-body">
-                                                            <h5 class="card-title"><?= $info['judul']; ?></h5>
-                                                            <p class="card-text"><?= nl2br(substr($info['info'], 0, 200)) . '...'; ?></p>
-                                                            <p class="card-text">
-                                                                <small class="text-muted">
-                                                                    <i class="fas fa-clock"></i> <?= date('d F Y', strtotime($info['created_at'] ?? 'now')); ?>
+                                                    <div class="col-md-9 col-8">
+                                                        <div class="card-body p-2">
+                                                            <h6 class="card-title mb-1" style="font-size: 0.85rem;"><?= $info['judul']; ?></h6>
+                                                            <p class="card-text mb-1" style="font-size: 0.75rem;"><?= nl2br(substr($info['info'], 0, 100)) . '...'; ?></p>
+                                                            <p class="card-text mb-0">
+                                                                <small class="text-muted" style="font-size: 0.7rem;">
+                                                                    <i class="fas fa-clock"></i> <?= date('d M Y', strtotime($info['created_at'] ?? 'now')); ?>
                                                                 </small>
                                                             </p>
                                                         </div>
@@ -615,10 +631,148 @@
 </div>
 
 <style>
-.avatar-xl {
-    width: 120px;
-    height: 120px;
-    object-fit: cover;
+/* Hover Effects */
+.hover-shadow {
+    transition: all 0.3s ease;
+}
+
+.hover-shadow:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Card Transitions */
+.card {
+    transition: all 0.3s ease;
+}
+
+/* Social Links Hover */
+.social-links a {
+    transition: all 0.3s ease;
+}
+
+.social-links a:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Tab Navigation */
+.nav-tabs .nav-link {
+    border: none;
+    color: #6c757d;
+    transition: all 0.3s ease;
+}
+
+.nav-tabs .nav-link:hover {
+    background-color: #f8f9fa;
+    color: #4e73df;
+}
+
+.nav-tabs .nav-link.active {
+    background-color: #4e73df;
+    color: white !important;
+    border-radius: 0.25rem 0.25rem 0 0;
+}
+
+/* Responsive Image */
+@media (max-width: 768px) {
+    .avatar-xl {
+        width: 80px !important;
+        height: 80px !important;
+    }
+
+    .fa-3x {
+        font-size: 2em !important;
+    }
+
+    .fa-2x {
+        font-size: 1.5em !important;
+    }
+}
+
+/* Button Animations */
+.btn {
+    transition: all 0.3s ease;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+/* Badge Styling */
+.badge {
+    transition: all 0.2s ease;
+}
+
+.badge:hover {
+    transform: scale(1.05);
+}
+
+/* Card Info Box */
+.card.border-primary,
+.card.border-success,
+.card.border-info,
+.card.border-warning,
+.card.border-danger {
+    border-width: 0 0 0 4px !important;
+}
+
+/* Smooth Scroll */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Loading Animation for Images */
+img {
+    transition: opacity 0.3s ease;
+}
+
+img:not([src]) {
+    opacity: 0;
+}
+
+/* Compact Table */
+.table-hover tbody tr {
+    transition: all 0.2s ease;
+}
+
+.table-hover tbody tr:hover {
+    background-color: #f8f9fa;
+    transform: scale(1.01);
+}
+
+/* Mobile Optimizations */
+@media (max-width: 576px) {
+    .container-fluid {
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+    }
+
+    .card-body {
+        padding: 0.75rem !important;
+    }
+
+    h1, .h1 {
+        font-size: 1.5rem !important;
+    }
+
+    h2, .h2 {
+        font-size: 1.3rem !important;
+    }
+
+    h3, .h3 {
+        font-size: 1.1rem !important;
+    }
+
+    .btn-block {
+        font-size: 0.85rem;
+        padding: 0.5rem;
+    }
 }
 
 .social-links .btn {
