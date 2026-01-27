@@ -362,9 +362,7 @@
                                             <i class="fas fa-bullhorn text-primary"></i> Informasi Terbaru
                                         </h6>
                                         <?php foreach ($recent_information as $info) : ?>
-                                            <div class="card shadow-sm mb-2 border-0 hover-shadow" style="cursor: pointer;"
-                                                 data-toggle="modal"
-                                                 data-target="#infoModal<?= $info['id']; ?>">
+                                            <div class="card shadow-sm mb-2 border-0 hover-shadow">
                                                 <div class="row g-0">
                                                     <div class="col-md-3 col-4">
                                                         <?php if ($info['gambar']) : ?>
@@ -382,38 +380,37 @@
                                                         <div class="card-body p-2">
                                                             <h6 class="card-title mb-1" style="font-size: 0.85rem;">
                                                                 <?= $info['judul']; ?>
-                                                                <span class="badge badge-primary badge-sm ml-1" style="font-size: 0.6rem;">
-                                                                    <i class="fas fa-arrow-right"></i>
-                                                                </span>
                                                             </h6>
-                                                            <p class="card-text mb-1" style="font-size: 0.75rem;">
+                                                            <p class="card-text mb-2" style="font-size: 0.75rem;">
                                                                 <?= nl2br(substr($info['info'], 0, 100)) . '...'; ?>
                                                             </p>
-                                                            <p class="card-text mb-0">
+                                                            <div class="d-flex justify-content-between align-items-center">
                                                                 <small class="text-muted" style="font-size: 0.7rem;">
                                                                     <i class="fas fa-clock"></i> <?= date('d M Y', strtotime($info['created_at'] ?? 'now')); ?>
                                                                 </small>
-                                                                <span class="float-right">
-                                                                    <small class="text-primary" style="font-size: 0.7rem;">
-                                                                        <i class="fas fa-book-open"></i> Baca
-                                                                    </small>
-                                                                </span>
-                                                            </p>
+                                                                <button type="button"
+                                                                        class="btn btn-primary btn-sm"
+                                                                        style="font-size: 0.7rem; padding: 0.2rem 0.5rem;"
+                                                                        data-toggle="modal"
+                                                                        data-target="#infoModal<?= $info['id']; ?>">
+                                                                    <i class="fas fa-book-open"></i> Baca Selengkapnya
+                                                                </button>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
 
                                             <!-- Modal untuk Informasi Lengkap -->
-                                            <div class="modal fade" id="infoModal<?= $info['id']; ?>" tabindex="-1" role="dialog">
+                                            <div class="modal fade" id="infoModal<?= $info['id']; ?>" tabindex="-1" role="dialog" aria-labelledby="modalLabel<?= $info['id']; ?>" aria-hidden="true" data-backdrop="static" data-keyboard="false">
                                                 <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable" role="document">
                                                     <div class="modal-content">
                                                         <div class="modal-header bg-primary text-white">
-                                                            <h5 class="modal-title">
+                                                            <h5 class="modal-title" id="modalLabel<?= $info['id']; ?>">
                                                                 <i class="fas fa-bullhorn"></i> <?= $info['judul']; ?>
                                                             </h5>
-                                                            <button type="button" class="close text-white" data-dismiss="modal">
-                                                                <span>&times;</span>
+                                                            <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
                                                             </button>
                                                         </div>
                                                         <div class="modal-body">
@@ -802,19 +799,13 @@ img:not([src]) {
     transform: scale(1.01);
 }
 
-/* Info Card Click Effect */
-.card[data-toggle="modal"] {
+/* Info Card Hover Effect */
+.hover-shadow {
     transition: all 0.3s ease;
 }
 
-.card[data-toggle="modal"]:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.2) !important;
-    border-left: 4px solid #4e73df !important;
-}
-
-.card[data-toggle="modal"]:active {
-    transform: translateY(0);
+.hover-shadow:hover {
+    box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.15) !important;
 }
 
 /* Modal Styling */
@@ -841,18 +832,10 @@ img:not([src]) {
     margin-bottom: 1rem;
 }
 
-/* Badge Animation */
-.badge-sm {
-    animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-    0%, 100% {
-        opacity: 1;
-    }
-    50% {
-        opacity: 0.6;
-    }
+/* Button Hover in Info Card */
+.card .btn-primary:hover {
+    transform: scale(1.05);
+    box-shadow: 0 2px 6px rgba(78, 115, 223, 0.4);
 }
 
 /* Mobile Optimizations */
