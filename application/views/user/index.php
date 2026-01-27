@@ -362,7 +362,9 @@
                                             <i class="fas fa-bullhorn text-primary"></i> Informasi Terbaru
                                         </h6>
                                         <?php foreach ($recent_information as $info) : ?>
-                                            <div class="card shadow-sm mb-2 border-0">
+                                            <div class="card shadow-sm mb-2 border-0 hover-shadow" style="cursor: pointer;"
+                                                 data-toggle="modal"
+                                                 data-target="#infoModal<?= $info['id']; ?>">
                                                 <div class="row g-0">
                                                     <div class="col-md-3 col-4">
                                                         <?php if ($info['gambar']) : ?>
@@ -378,13 +380,67 @@
                                                     </div>
                                                     <div class="col-md-9 col-8">
                                                         <div class="card-body p-2">
-                                                            <h6 class="card-title mb-1" style="font-size: 0.85rem;"><?= $info['judul']; ?></h6>
-                                                            <p class="card-text mb-1" style="font-size: 0.75rem;"><?= nl2br(substr($info['info'], 0, 100)) . '...'; ?></p>
+                                                            <h6 class="card-title mb-1" style="font-size: 0.85rem;">
+                                                                <?= $info['judul']; ?>
+                                                                <span class="badge badge-primary badge-sm ml-1" style="font-size: 0.6rem;">
+                                                                    <i class="fas fa-arrow-right"></i>
+                                                                </span>
+                                                            </h6>
+                                                            <p class="card-text mb-1" style="font-size: 0.75rem;">
+                                                                <?= nl2br(substr($info['info'], 0, 100)) . '...'; ?>
+                                                            </p>
                                                             <p class="card-text mb-0">
                                                                 <small class="text-muted" style="font-size: 0.7rem;">
                                                                     <i class="fas fa-clock"></i> <?= date('d M Y', strtotime($info['created_at'] ?? 'now')); ?>
                                                                 </small>
+                                                                <span class="float-right">
+                                                                    <small class="text-primary" style="font-size: 0.7rem;">
+                                                                        <i class="fas fa-book-open"></i> Baca
+                                                                    </small>
+                                                                </span>
                                                             </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Modal untuk Informasi Lengkap -->
+                                            <div class="modal fade" id="infoModal<?= $info['id']; ?>" tabindex="-1" role="dialog">
+                                                <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header bg-primary text-white">
+                                                            <h5 class="modal-title">
+                                                                <i class="fas fa-bullhorn"></i> <?= $info['judul']; ?>
+                                                            </h5>
+                                                            <button type="button" class="close text-white" data-dismiss="modal">
+                                                                <span>&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <?php if ($info['gambar']) : ?>
+                                                                <div class="text-center mb-3">
+                                                                    <img src="<?= base_url('assets/img/info/' . $info['gambar']); ?>"
+                                                                         class="img-fluid rounded shadow"
+                                                                         style="max-height: 400px; object-fit: contain;"
+                                                                         alt="<?= $info['judul']; ?>">
+                                                                </div>
+                                                            <?php endif; ?>
+
+                                                            <div class="mb-3">
+                                                                <small class="text-muted">
+                                                                    <i class="fas fa-calendar-alt"></i>
+                                                                    <?= date('l, d F Y', strtotime($info['created_at'] ?? 'now')); ?>
+                                                                </small>
+                                                            </div>
+
+                                                            <div class="info-content" style="line-height: 1.8; text-align: justify;">
+                                                                <?= nl2br($info['info']); ?>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">
+                                                                <i class="fas fa-times"></i> Tutup
+                                                            </button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -746,6 +802,59 @@ img:not([src]) {
     transform: scale(1.01);
 }
 
+/* Info Card Click Effect */
+.card[data-toggle="modal"] {
+    transition: all 0.3s ease;
+}
+
+.card[data-toggle="modal"]:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.2) !important;
+    border-left: 4px solid #4e73df !important;
+}
+
+.card[data-toggle="modal"]:active {
+    transform: translateY(0);
+}
+
+/* Modal Styling */
+.modal-content {
+    border-radius: 0.5rem;
+    border: none;
+}
+
+.modal-header {
+    border-radius: 0.5rem 0.5rem 0 0;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.modal-body {
+    max-height: calc(100vh - 210px);
+}
+
+.info-content {
+    font-size: 1rem;
+    color: #333;
+}
+
+.info-content p {
+    margin-bottom: 1rem;
+}
+
+/* Badge Animation */
+.badge-sm {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.6;
+    }
+}
+
 /* Mobile Optimizations */
 @media (max-width: 576px) {
     .container-fluid {
@@ -772,6 +881,14 @@ img:not([src]) {
     .btn-block {
         font-size: 0.85rem;
         padding: 0.5rem;
+    }
+
+    .modal-dialog {
+        margin: 0.5rem;
+    }
+
+    .info-content {
+        font-size: 0.9rem;
     }
 }
 
