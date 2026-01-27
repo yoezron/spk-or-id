@@ -400,48 +400,6 @@
                                                     </div>
                                                 </div>
                                             </div>
-
-                                            <!-- Modal untuk Informasi Lengkap -->
-                                            <div class="modal fade" id="infoModal<?= $info['id']; ?>" tabindex="-1" role="dialog">
-                                                <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable" role="document">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header bg-primary text-white">
-                                                            <h5 class="modal-title">
-                                                                <i class="fas fa-bullhorn"></i> <?= $info['judul']; ?>
-                                                            </h5>
-                                                            <button type="button" class="close text-white" data-dismiss="modal">
-                                                                <span>&times;</span>
-                                                            </button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <?php if ($info['gambar']) : ?>
-                                                                <div class="text-center mb-3">
-                                                                    <img src="<?= base_url('assets/img/info/' . $info['gambar']); ?>"
-                                                                         class="img-fluid rounded shadow"
-                                                                         style="max-height: 400px; object-fit: contain;"
-                                                                         alt="<?= $info['judul']; ?>">
-                                                                </div>
-                                                            <?php endif; ?>
-
-                                                            <div class="mb-3">
-                                                                <small class="text-muted">
-                                                                    <i class="fas fa-calendar-alt"></i>
-                                                                    <?= date('l, d F Y', strtotime($info['created_at'] ?? 'now')); ?>
-                                                                </small>
-                                                            </div>
-
-                                                            <div class="info-content" style="line-height: 1.8; text-align: justify;">
-                                                                <?= nl2br($info['info']); ?>
-                                                            </div>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">
-                                                                <i class="fas fa-times"></i> Tutup
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
                                         <?php endforeach; ?>
                                     <?php else : ?>
                                         <div class="alert alert-info text-center">
@@ -683,6 +641,52 @@
     </div>
 </div>
 
+<!-- Info Modals - Struktur sama dengan QR Modal untuk stabilitas -->
+<?php if (isset($recent_information) && !empty($recent_information)) : ?>
+    <?php foreach ($recent_information as $info) : ?>
+        <div class="modal fade" id="infoModal<?= $info['id']; ?>" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header bg-primary text-white">
+                        <h5 class="modal-title">
+                            <i class="fas fa-bullhorn"></i> <?= $info['judul']; ?>
+                        </h5>
+                        <button type="button" class="close text-white" data-dismiss="modal">
+                            <span>&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" style="max-height: 70vh; overflow-y: auto;">
+                        <?php if ($info['gambar']) : ?>
+                            <div class="text-center mb-3">
+                                <img src="<?= base_url('assets/img/info/' . $info['gambar']); ?>"
+                                     class="img-fluid rounded shadow"
+                                     style="max-height: 400px; object-fit: contain;"
+                                     alt="<?= $info['judul']; ?>">
+                            </div>
+                        <?php endif; ?>
+
+                        <div class="mb-3">
+                            <small class="text-muted">
+                                <i class="fas fa-calendar-alt"></i>
+                                <?= date('l, d F Y', strtotime($info['created_at'] ?? 'now')); ?>
+                            </small>
+                        </div>
+
+                        <div style="line-height: 1.8; text-align: justify;">
+                            <?= nl2br($info['info']); ?>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">
+                            <i class="fas fa-times"></i> Tutup
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <?php endforeach; ?>
+<?php endif; ?>
+
 <style>
 /* Hover Effects */
 .hover-shadow {
@@ -813,7 +817,7 @@ img:not([src]) {
     transform: none !important;
 }
 
-/* Modal Styling */
+/* Modal Styling - Minimal seperti QR Modal */
 .modal-content {
     border-radius: 0.5rem;
     border: none;
@@ -822,59 +826,6 @@ img:not([src]) {
 .modal-header {
     border-radius: 0.5rem 0.5rem 0 0;
     border-bottom: 2px solid rgba(255, 255, 255, 0.2);
-}
-
-.modal-body {
-    max-height: calc(100vh - 210px);
-}
-
-.info-content {
-    font-size: 1rem;
-    color: #333;
-}
-
-.info-content p {
-    margin-bottom: 1rem;
-}
-
-/* Disable ALL hover effects inside modal to prevent flash */
-.modal * {
-    transition: none !important;
-    transform: none !important;
-}
-
-.modal img,
-.modal .card,
-.modal .btn,
-.modal .badge {
-    transition: none !important;
-    transform: none !important;
-}
-
-.modal img:hover,
-.modal .card:hover,
-.modal .btn:hover,
-.modal .badge:hover {
-    transform: none !important;
-    box-shadow: none !important;
-}
-
-/* Prevent modal backdrop flash */
-.modal-backdrop {
-    transition: opacity 0.15s linear !important;
-}
-
-.modal.fade .modal-dialog {
-    transition: transform 0.3s ease-out !important;
-}
-
-/* Keep modal stable */
-.modal.show {
-    display: block !important;
-}
-
-.modal.show .modal-dialog {
-    transform: none !important;
 }
 
 /* Button Hover in Info Card */
@@ -946,31 +897,12 @@ img:not([src]) {
 </style>
 
 <script>
-// Prevent modal flash issue - simplified and stable
+// Minimal JS - let Bootstrap handle modal behavior naturally
 $(document).ready(function() {
-    // Remove all previous event handlers to prevent conflicts
-    $('[data-toggle="modal"]').off('click');
-    $('.modal').off('shown.bs.modal hidden.bs.modal');
-
-    // Simple click handler - let Bootstrap handle the rest
-    $('[data-toggle="modal"]').on('click', function(e) {
-        e.preventDefault();
-        e.stopImmediatePropagation();
-        var targetModal = $(this).attr('data-target');
-        $(targetModal).modal('show');
-        return false;
-    });
-
-    // Clean up after modal closes
-    $('.modal').on('hidden.bs.modal', function (e) {
-        e.stopPropagation();
+    // Clean up any leftover backdrops when modal closes
+    $('.modal').on('hidden.bs.modal', function () {
         $('.modal-backdrop').remove();
         $('body').removeClass('modal-open').css('padding-right', '');
-    });
-
-    // Prevent mouse events from interfering with modal
-    $('.modal').on('mouseenter mouseleave mousemove', function(e) {
-        e.stopPropagation();
     });
 });
 </script>
