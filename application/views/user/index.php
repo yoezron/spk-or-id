@@ -402,15 +402,15 @@
                                             </div>
 
                                             <!-- Modal untuk Informasi Lengkap -->
-                                            <div class="modal fade" id="infoModal<?= $info['id']; ?>" tabindex="-1" role="dialog" aria-labelledby="modalLabel<?= $info['id']; ?>" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+                                            <div class="modal fade" id="infoModal<?= $info['id']; ?>" tabindex="-1" role="dialog">
                                                 <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable" role="document">
                                                     <div class="modal-content">
                                                         <div class="modal-header bg-primary text-white">
-                                                            <h5 class="modal-title" id="modalLabel<?= $info['id']; ?>">
+                                                            <h5 class="modal-title">
                                                                 <i class="fas fa-bullhorn"></i> <?= $info['judul']; ?>
                                                             </h5>
-                                                            <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
-                                                                <span aria-hidden="true">&times;</span>
+                                                            <button type="button" class="close text-white" data-dismiss="modal">
+                                                                <span>&times;</span>
                                                             </button>
                                                         </div>
                                                         <div class="modal-body">
@@ -899,6 +899,36 @@ img:not([src]) {
     font-weight: bold;
 }
 </style>
+
+<script>
+// Prevent modal flash issue
+$(document).ready(function() {
+    // Handle info modal with proper event handling
+    $('[data-toggle="modal"]').on('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var targetModal = $(this).data('target');
+        $(targetModal).modal('show');
+    });
+
+    // Ensure modal closes properly
+    $('.modal').on('hidden.bs.modal', function () {
+        $(this).removeClass('show');
+        $('.modal-backdrop').remove();
+        $('body').removeClass('modal-open');
+        $('body').css('padding-right', '');
+    });
+
+    // Prevent multiple modals stacking
+    $('.modal').on('show.bs.modal', function () {
+        var zIndex = 1040 + (10 * $('.modal:visible').length);
+        $(this).css('z-index', zIndex);
+        setTimeout(function() {
+            $('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1).addClass('modal-stack');
+        }, 0);
+    });
+});
+</script>
 
 </div>
 <!-- End of Main Content -->
