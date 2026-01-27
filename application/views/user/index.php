@@ -799,13 +799,18 @@ img:not([src]) {
     transform: scale(1.01);
 }
 
-/* Info Card Hover Effect */
+/* Info Card Hover Effect - minimal to prevent flash */
 .hover-shadow {
-    transition: all 0.3s ease;
+    transition: box-shadow 0.2s ease;
 }
 
 .hover-shadow:hover {
     box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Disable hover on info cards to prevent modal trigger issues */
+.hover-shadow:active {
+    transform: none !important;
 }
 
 /* Modal Styling */
@@ -830,6 +835,46 @@ img:not([src]) {
 
 .info-content p {
     margin-bottom: 1rem;
+}
+
+/* Disable ALL hover effects inside modal to prevent flash */
+.modal * {
+    transition: none !important;
+    transform: none !important;
+}
+
+.modal img,
+.modal .card,
+.modal .btn,
+.modal .badge {
+    transition: none !important;
+    transform: none !important;
+}
+
+.modal img:hover,
+.modal .card:hover,
+.modal .btn:hover,
+.modal .badge:hover {
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+/* Prevent modal backdrop flash */
+.modal-backdrop {
+    transition: opacity 0.15s linear !important;
+}
+
+.modal.fade .modal-dialog {
+    transition: transform 0.3s ease-out !important;
+}
+
+/* Keep modal stable */
+.modal.show {
+    display: block !important;
+}
+
+.modal.show .modal-dialog {
+    transform: none !important;
 }
 
 /* Button Hover in Info Card */
@@ -901,31 +946,31 @@ img:not([src]) {
 </style>
 
 <script>
-// Prevent modal flash issue
+// Prevent modal flash issue - simplified and stable
 $(document).ready(function() {
-    // Handle info modal with proper event handling
+    // Remove all previous event handlers to prevent conflicts
+    $('[data-toggle="modal"]').off('click');
+    $('.modal').off('shown.bs.modal hidden.bs.modal');
+
+    // Simple click handler - let Bootstrap handle the rest
     $('[data-toggle="modal"]').on('click', function(e) {
         e.preventDefault();
-        e.stopPropagation();
-        var targetModal = $(this).data('target');
+        e.stopImmediatePropagation();
+        var targetModal = $(this).attr('data-target');
         $(targetModal).modal('show');
+        return false;
     });
 
-    // Ensure modal closes properly
-    $('.modal').on('hidden.bs.modal', function () {
-        $(this).removeClass('show');
+    // Clean up after modal closes
+    $('.modal').on('hidden.bs.modal', function (e) {
+        e.stopPropagation();
         $('.modal-backdrop').remove();
-        $('body').removeClass('modal-open');
-        $('body').css('padding-right', '');
+        $('body').removeClass('modal-open').css('padding-right', '');
     });
 
-    // Prevent multiple modals stacking
-    $('.modal').on('show.bs.modal', function () {
-        var zIndex = 1040 + (10 * $('.modal:visible').length);
-        $(this).css('z-index', zIndex);
-        setTimeout(function() {
-            $('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1).addClass('modal-stack');
-        }, 0);
+    // Prevent mouse events from interfering with modal
+    $('.modal').on('mouseenter mouseleave mousemove', function(e) {
+        e.stopPropagation();
     });
 });
 </script>
