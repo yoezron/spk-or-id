@@ -29,13 +29,13 @@
                 <th scope="row"><?= $i;  ?></th>
                 <td><?= $m['menu']; ?></td>
                 <td>
-                <button href="" type="button" class="btn btn-success">edit</button>    
-                <button href="" type="button" class="btn btn-danger">delete</button>    
-                
+                <button href="" type="button" class="btn btn-success">edit</button>
+                <button href="" type="button" class="btn btn-danger">delete</button>
+
                 </td>
-                <?php $i++; ?>
-            <?php endforeach; ?>
             </tr>
+            <?php $i++; ?>
+            <?php endforeach; ?>
         </tbody>
 </table>
     </div>
@@ -48,24 +48,23 @@
 <!-- End of Main Content -->
 
 <!-- Modal -->
-<div class="modal fade" id="newMenuModal" tabindex="1" aria-labelledby="newMenuModalLabel" aria-hidden="true">
+<div class="modal fade" id="newMenuModal" tabindex="-1" aria-labelledby="newMenuModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <h1 class="modal-title fs-5" id="newMenuModalLabel">Tambah Menu</h1>
-        <button type="button" class="btn btn-close btn-danger " data-dismiss="modal" aria-label="Close"></button>
+        <button type="button" class="btn btn-close btn-danger" data-dismiss="modal" aria-label="Close"></button>
       </div>
       <form action="<?= base_url('menu'); ?>" method="post">
-      <div class="modal-body">
-      <form>
-        <div class="mb-3">
-            <input type="text" class="form-control" id="menu" name="menu" aria-describedby="menu" Placeholder="Nama Menu">
+        <div class="modal-body">
+          <div class="mb-3">
+            <input type="text" class="form-control" id="menu" name="menu" aria-describedby="menu" placeholder="Nama Menu">
+          </div>
         </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">Tambah</button>
-      </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Tambah</button>
+        </div>
       </form>
     </div>
   </div>
