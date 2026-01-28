@@ -28,7 +28,44 @@ class User extends CI_Controller
         $user_id = $data['user']['id'];
         $data['peran'] = $this->User_model->getMemberRole($user_id);
         $data['recent_information'] = $this->db->order_by('id', 'DESC')->get('info')->result_array();
-        $data['user_posts'] = $this->db->get('posting')->result_array();
+
+        // Pagination untuk artikel
+        $this->load->library('pagination');
+
+        $config['base_url'] = base_url('user/index');
+        $config['total_rows'] = $this->db->count_all('posting');
+        $config['per_page'] = 5;
+        $config['uri_segment'] = 3;
+
+        // Styling pagination
+        $config['full_tag_open'] = '<ul class="pagination pagination-sm mb-0">';
+        $config['full_tag_close'] = '</ul>';
+        $config['first_link'] = 'First';
+        $config['last_link'] = 'Last';
+        $config['first_tag_open'] = '<li class="page-item">';
+        $config['first_tag_close'] = '</li>';
+        $config['prev_link'] = '&laquo;';
+        $config['prev_tag_open'] = '<li class="page-item">';
+        $config['prev_tag_close'] = '</li>';
+        $config['next_link'] = '&raquo;';
+        $config['next_tag_open'] = '<li class="page-item">';
+        $config['next_tag_close'] = '</li>';
+        $config['last_tag_open'] = '<li class="page-item">';
+        $config['last_tag_close'] = '</li>';
+        $config['cur_tag_open'] = '<li class="page-item active"><a class="page-link">';
+        $config['cur_tag_close'] = '</a></li>';
+        $config['num_tag_open'] = '<li class="page-item">';
+        $config['num_tag_close'] = '</li>';
+        $config['attributes'] = array('class' => 'page-link');
+
+        $this->pagination->initialize($config);
+
+        $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+        $data['user_posts'] = $this->db->order_by('waktu_posting', 'DESC')
+                                       ->limit($config['per_page'], $page)
+                                       ->get('posting')
+                                       ->result_array();
+        $data['pagination'] = $this->pagination->create_links();
 
         // Tentukan tab aktif
 
@@ -42,88 +79,22 @@ class User extends CI_Controller
     // Method untuk menangani tab 'info'
     public function info()
     {
-        $data['title'] = 'Profil Saya';
-        $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
-        $data['active_tab'] = 'info';
-
-        // Ambil nilai gaji dari pengguna yang sedang login
-        $gaji = $data['user']['gaji'];
-
-        // Ambil data iuran sesuai dengan nilai gaji dari tabel "user_iuran"
-        $data['iuran'] = $this->db->get_where('user_iuran', ['gaji' => $gaji])->row_array();
-        // Ambil peran pengguna yang sedang login
-        // Ambil id pengguna
-        $user_id = $data['user']['id'];
-        $data['peran'] = $this->User_model->getMemberRole($user_id);
-        $data['recent_information'] = $this->db->order_by('id', 'DESC')->get('info')->result_array();
-        $data['user_posts'] = $this->db->get('posting')->result_array();
-
-        // Tentukan tab aktif
-
-        $this->load->view('templates/header', $data);
-        $this->load->view('templates/sidebar', $data);
-        $this->load->view('templates/topbar', $data);
-        $this->load->view('user/index', $data);
-        $this->load->view('templates/footer');
+        // Redirect ke index dengan anchor
+        redirect('user/index#info');
     }
 
     // Method untuk menangani tab 'userdetail'
     public function userdetail()
     {
-        $data['title'] = 'Profil Saya';
-        $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
-        $data['active_tab'] = 'userdetail';
-
-        // Ambil nilai gaji dari pengguna yang sedang login
-        $gaji = $data['user']['gaji'];
-
-        // Ambil data iuran sesuai dengan nilai gaji dari tabel "user_iuran"
-        $data['iuran'] = $this->db->get_where('user_iuran', ['gaji' => $gaji])->row_array();
-        // Ambil peran pengguna yang sedang login
-        // Ambil id pengguna
-        $user_id = $data['user']['id'];
-        $data['peran'] = $this->User_model->getMemberRole($user_id);
-        $data['recent_information'] = $this->db->order_by('id', 'DESC')->get('info')->result_array();
-        $data['user_posts'] = $this->db->get('posting')->result_array();
-
-
-
-        // Tentukan tab aktif
-
-        $this->load->view('templates/header', $data);
-        $this->load->view('templates/sidebar', $data);
-        $this->load->view('templates/topbar', $data);
-        $this->load->view('user/index', $data);
-        $this->load->view('templates/footer');
+        // Redirect ke index dengan anchor
+        redirect('user/index#userdetail');
     }
 
-    // Method untuk menangani tab 'settings'
+    // Method untuk menangani tab 'benefit'
     public function benefit()
     {
-        $data['title'] = 'Profil Saya';
-        $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
-        $data['active_tab'] = 'benefit';
-
-        // Ambil nilai gaji dari pengguna yang sedang login
-        $gaji = $data['user']['gaji'];
-
-        // Ambil data iuran sesuai dengan nilai gaji dari tabel "user_iuran"
-        $data['iuran'] = $this->db->get_where('user_iuran', ['gaji' => $gaji])->row_array();
-        // Ambil peran pengguna yang sedang login
-        // Ambil id pengguna
-        $user_id = $data['user']['id'];
-        $data['peran'] = $this->User_model->getMemberRole($user_id);
-        $data['recent_information'] = $this->db->order_by('id', 'DESC')->get('info')->result_array();
-        $data['user_posts'] = $this->db->get('posting')->result_array();
-
-
-        // Tentukan tab aktif
-
-        $this->load->view('templates/header', $data);
-        $this->load->view('templates/sidebar', $data);
-        $this->load->view('templates/topbar', $data);
-        $this->load->view('user/index', $data);
-        $this->load->view('templates/footer');
+        // Redirect ke index dengan anchor
+        redirect('user/index#benefit');
     }
 
 
