@@ -578,13 +578,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <?php
-                                        function compareTime($a, $b) {
-                                            return strtotime($b['waktu_posting']) - strtotime($a['waktu_posting']);
-                                        }
-                                        usort($user_posts, 'compareTime');
-
-                                        if (!empty($user_posts)) :
+                                        <?php if (!empty($user_posts)) :
                                             foreach ($user_posts as $posting) : ?>
                                                 <tr>
                                                     <td><strong><?= $posting['judul_tulisan'] ?></strong></td>
@@ -611,6 +605,18 @@
                                     </tbody>
                                 </table>
                             </div>
+                            <?php if (!empty($pagination)) : ?>
+                                <div class="card-footer bg-white">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <small class="text-muted">
+                                            Menampilkan artikel SPK
+                                        </small>
+                                        <div>
+                                            <?= $pagination; ?>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
